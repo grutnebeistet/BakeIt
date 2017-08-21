@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Bakeit</string>
+    <string name="content_authority">com.roberts.adrian.bakeit</string>
+    <string name="recipe_ingredients_label">Ingredients</string>
+
+    <string name="steps_bundle_description">description</string>
+    <string name="steps_bundle_title">shortDescription</string>
+    <string name="steps_bundle_video_url">videoURL</string>
+    <string name="steps_bundle_image_url">imageURL</string>
+
+
+</resources>

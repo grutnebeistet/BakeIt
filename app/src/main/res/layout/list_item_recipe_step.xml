@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/step_description_tv"
+        android:layout_width="368dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        tools:text="(step desc)" />
+
+</LinearLayout>

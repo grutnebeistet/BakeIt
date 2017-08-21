@@ -1,0 +1,30 @@
+package com.roberts.adrian.bakeit.activities;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.roberts.adrian.bakeit.R;
+import com.roberts.adrian.bakeit.sync.RecipesSyncUtils;
+import com.roberts.adrian.bakeit.utils.NetworkUtils;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        // TODO førstegans lunch ingenting vises? fiks
+
+
+        Boolean connection = NetworkUtils.workingConnection(this);
+        //   getSupportLoaderManager().initLoader(ID_LOADER, null, this);
+        if (connection) {
+            RecipesSyncUtils.initialize(this);
+        }
+
+    }
+}

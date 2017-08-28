@@ -13,7 +13,7 @@ import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.*;
 
 public class RecipeDbHelper extends SQLiteOpenHelper {
     private final static String DATABASE_NAME = "recipes.db";
-    private static final int DB_VERSION = 23;
+    private static final int DB_VERSION = 24;
 
     public RecipeDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);

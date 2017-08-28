@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/master_list_fragment"
-    android:name="com.roberts.adrian.bakeit.fragments.RecipeListFragment"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:id="@+id/container_main">
+
+    <fragment
+        android:id="@+id/master_list_fragment"
+        android:name="com.roberts.adrian.bakeit.fragments.RecipeListFragment"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_list" />
+</FrameLayout>
 

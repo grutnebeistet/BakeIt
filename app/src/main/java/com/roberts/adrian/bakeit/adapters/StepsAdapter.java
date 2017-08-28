@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.activities.RecipeDetailsActivity;
+import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 
 /**
  * Created by Adrian on 30/07/2017.
@@ -36,14 +36,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(StepsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String stepShortDescription = mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_SHORT_DESC);
+        String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
         holder.stepDescriptionTv.setText(stepShortDescription);
 
     }
 
     @Override
     public StepsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_recipe_step, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item_recipe_step, parent, false);
         return new StepsViewHolder(view);
     }
 
@@ -63,7 +63,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
         StepsViewHolder(View view) {
             super(view);
-            stepDescriptionTv = (TextView) view.findViewById(R.id.step_description_tv);
+            stepDescriptionTv = (TextView) view.findViewById(R.id.tv_step_descr);
             view.setOnClickListener(this);
 
         }
@@ -74,10 +74,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             mCursor.moveToPosition(getAdapterPosition());
 
             Bundle stepDetailsBundle = new Bundle();
-            String stepShortDescription = mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_SHORT_DESC);
-            String stepDescription = mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_DESC);
-            String stepVideoUrl = mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_VIDEO);
-            String stepImageUrl = mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_IMG);
+            String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+            String stepDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_DESC);
+            String stepVideoUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_VIDEO);
+            String stepImageUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_IMG);
 
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_title), stepShortDescription);
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_description), stepDescription);

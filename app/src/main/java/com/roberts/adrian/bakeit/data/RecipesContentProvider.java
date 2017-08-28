@@ -120,16 +120,16 @@ public class RecipesContentProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case CODE_RECIPE:
                 newRowId = db.insert(RecipeContract.RecipeEntry.TABLE_RECIPES, null, values);
-                Log.e(LOG_TAG, "inserted REC");
+             //   Log.e(LOG_TAG, "inserted REC");
                 break;
             case CODE_INGREDIENTS:
                 newRowId = db.insert(TABLE_INGREDIENTS, null, values);
-                Log.e(LOG_TAG, "inserted ING");
+               // Log.e(LOG_TAG, "inserted ING");
                 break;
             case CODE_STEPS:
                 newRowId = db.insert(RecipeContract.RecipeEntry.TABLE_STEPS, null, values);
-                Log.i(LOG_TAG, "insertion Descr: " + values.getAsString(RecipeContract.RecipeEntry.COLUMN_STEP_DESCR));
-                Log.e(LOG_TAG, "inserted STE");
+                //Log.i(LOG_TAG, "insertion Descr: " + values.getAsString(RecipeContract.RecipeEntry.COLUMN_STEP_DESCR));
+               // Log.e(LOG_TAG, "inserted STE");
                 break;
             default:
                 throw new IllegalArgumentException("Failed to insert: " + uri);

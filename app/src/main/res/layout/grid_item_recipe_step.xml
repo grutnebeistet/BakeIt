@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list_item"
+    android:id="@+id/list_item_step_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal">
+    android:orientation="vertical">
+
 
     <ImageView
-        android:layout_width="322dp"
-        android:layout_height="217dp"
+        android:layout_width="248dp"
+        android:layout_height="167dp"
         android:src="@mipmap/ic_pink_frame_noshape"
-        android:scaleType="centerCrop"
         android:layout_centerInParent="true"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/recipe_image"/>
     <TextView
-        android:id="@+id/textview_recipe_name"
+        android:id="@+id/tv_step_descr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:layout_centerInParent="true"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        android:textColor="@android:color/black"
-        tools:text="SATANS BAKEVERK" />
-
+        tools:text="(step desc)" />
 
 </RelativeLayout>

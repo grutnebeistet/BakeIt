@@ -1,46 +1,40 @@
 package com.roberts.adrian.bakeit.fragments;
 
-import android.content.Context;
+import android.app.ListFragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.activities.RecipeDetailsActivity;
+import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.adapters.RecipeAdapter;
 import com.roberts.adrian.bakeit.data.RecipeContract;
-import com.roberts.adrian.bakeit.utils.NetworkUtils;
 
-import butterknife.ButterKnife;
-
+import static com.roberts.adrian.bakeit.R.id.textview_recipe_name;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ID;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_RECIPE;
 
-public class RecipeListFragment extends Fragment
-        implements RecipeAdapter.RecipeAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class RecipeListFragment extends ListFragment
+        implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     // OnImageClickListener mCallback;
 
     // @BindView(R.id.recyclerViewMain)
     //RecyclerView mRecipesRecyclerView;
     RecipeAdapter mRecipeAdapter;
-
+    private SimpleCursorAdapter mAdapter;
     RecyclerView mRecipesRecyclerView;
 
     private static final String LOG_TAG = RecipeListFragment.class.getSimpleName();
 
     private static final String[] MAIN_RECIPE_PROJECTION = {
-            RecipeContract.RecipeEntry.COLUMN_RECIPE_ID,
+            COLUMN_RECIPE_ID,
             RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME
     };
     public static final int INDEX_RECIPE_ID = 0;
@@ -48,89 +42,97 @@ public class RecipeListFragment extends Fragment
 
     private final int ID_LOADER = 1349;
 
-    // OnImageClickListener interface, calls a method in the host activity named onImageSelected
-//    public interface OnImageClickListener {
-//        void onImageSelected(int position);
-//    }
+    private Cursor mData;
 
-    // Override onAttach to make sure that the container activity has implemented the callback
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ButterKnife.bind(getActivity());
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
-        // This makes sure that the host activity has implemented the callback interface
-        // If not, it throws an exception
-    /*    try {
-            mCallback = (OnImageClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnImageClickListener");
-        }*/
+        super.onActivityCreated(savedInstanceState);
+        String[] columns = {RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME};
+
+        mAdapter = new SimpleCursorAdapter(getActivity(),
+                R.layout.list_recipe_item, null, columns, new int[]{textview_recipe_name}, 0);  // android.R.layout.simple_list_item_2, android.R.id.text1
+
+        setListAdapter(mAdapter);
+
+        getActivity().getLoaderManager().initLoader(ID_LOADER, null, this);
+       /* setListAdapter(new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_activated_1));
+
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);*/
+        // getListView().setItemChecked(mCurCheckPosition, true);
+
     }
 
 
-    // Mandatory empty constructor
-    public RecipeListFragment() {
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // super.onListItemClick(l, v, position, id);
+        Log.i(LOG_TAG, "position: " + position + "  id: " + id);
+        showDetails(id);
     }
 
-    // Inflates the GridView of all AndroidMe images
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        ButterKnife.bind(getActivity());
+    private void showDetails(long id) {
+        DetailsFragment details = new DetailsFragment();
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        details.setArguments(args);
 
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+//        getActivity().setContentView(R.layout.activity_recipe_details);
 
-        mRecipesRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewMain);
-        // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the image resources to display
-        mRecipeAdapter = new RecipeAdapter(getActivity(), this);
+        //getFragmentManager().beginTransaction().add(R.id.containter_steps, details).commit();
 
-        mRecipesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // Set the adapter on the GridView
-        mRecipesRecyclerView.setAdapter(mRecipeAdapter);
-        Boolean connection = NetworkUtils.workingConnection(getActivity());
+        // TODO : twopane etc
 
-        getActivity().getSupportLoaderManager().initLoader(ID_LOADER, null, this);
-     /*   if (connection) {
-            RecipesSyncUtils.initialize(getActivity());
-        }*/
+        // Create an intent for starting the DetailsActivity
+        Intent intent = new Intent();
 
-        // Return the root view
-        return rootView;
-    }
+        // explicitly set the activity context and class
+        // associated with the intent (context, class)
+        intent.setClass(getActivity(), RecipeDetailzActivity.class);
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.i(LOG_TAG, "onCrateLoader");
-        return new CursorLoader(getActivity(),
-                CONTENT_URI_RECIPE,
-                MAIN_RECIPE_PROJECTION,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mRecipeAdapter.swapCursor(data);
-        Log.i(LOG_TAG, "Cursor.getC " + data.getCount());
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mRecipeAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onClick(int recipe_id, String recipe_name) {
-        Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
-        intent.putExtra("recipeID", recipe_id);
-        intent.putExtra("recipeName", recipe_name);
+        // pass the current position
+        intent.putExtra("id", id);
 
         startActivity(intent);
     }
 
+    @Override
+    public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME, RecipeContract.RecipeEntry._ID}; // ID?
+
+        return new android.content.CursorLoader(getActivity(), CONTENT_URI_RECIPE,
+                projection, null, null, null);
+        //COLUMN_RECIPE_ID + " ASC");
+
+    }
+
+    @Override
+    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
+ /*    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME, RecipeContract.RecipeEntry._ID}; // ID?
+
+        return new CursorLoader(getActivity(),CONTENT_URI_RECIPE,
+                projection, null, null, null);
+                //COLUMN_RECIPE_ID + " ASC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }*/
 }

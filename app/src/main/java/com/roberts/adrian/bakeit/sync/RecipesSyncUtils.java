@@ -51,8 +51,10 @@ public class RecipesSyncUtils {
                 if (cursor == null || cursor.getCount() == 0) {
                     Log.i("checkForEmpty", "EEEMPPPTYY\nStarting immediatesync");
                     startImmediateSync(context);
+                    cursor.close();
+                    db.close();
                 }
-                cursor.close();
+
 
             }
         });

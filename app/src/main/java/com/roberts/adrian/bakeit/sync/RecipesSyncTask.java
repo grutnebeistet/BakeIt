@@ -1,6 +1,7 @@
 package com.roberts.adrian.bakeit.sync;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.roberts.adrian.bakeit.utils.NetworkUtils;
 
@@ -20,6 +21,7 @@ public class RecipesSyncTask {
             String jsonResponse = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.QUERY_URL);
        //     Log.i(LOG_TAG, jsonResponse);
             NetworkUtils.getRecipeContentValuesFromJson(context, jsonResponse);
+            Log.i(LOG_TAG, "syncing data..");
 
             //context.getContentResolver().bulkInsert(CONTENT_URI_RECIPE, contentValues);
 

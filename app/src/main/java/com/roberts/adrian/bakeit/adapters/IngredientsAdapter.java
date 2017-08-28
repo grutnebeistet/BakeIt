@@ -2,7 +2,6 @@ package com.roberts.adrian.bakeit.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.activities.RecipeDetailsActivity;
+import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 
 /**
  * Created by Adrian on 30/07/2017.
@@ -23,10 +22,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     //  final private StepsAdapterOnclickHandler mOnclickHandler;
 
 
-    public interface StepsAdapterOnclickHandler {
-        void onClick(Bundle stepDescriptions);
-    }
-
     public IngredientsAdapter(Context context) {
         mContext = context;
         //  mOnclickHandler = clickHandler;
@@ -36,9 +31,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(IngredientsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String ingredientQty = mCursor.getString(RecipeDetailsActivity.INDEX_INGREDIENT_QUANTITY);
-        String ingredientMeasure = mCursor.getString(RecipeDetailsActivity.INDEX_INGREDIENT_MEASURE);
-        String ingredientName = mCursor.getString(RecipeDetailsActivity.INDEX_INGREDIENT_NAME);
+        String ingredientQty = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_QUANTITY);
+        String ingredientMeasure = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_MEASURE);
+        String ingredientName = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_NAME);
         holder.ingredientQty.setText(ingredientQty);
         holder.ingredientMeasure.setText(ingredientMeasure);
         holder.ingredientName.setText(ingredientName);

@@ -1,40 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.roberts.adrian.bakeit.activities.RecipeDetailsActivity">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ingredients_label"
+ <!--   <LinearLayout
+        android:id="@+id/containter_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/ingredients_tv"
-            android:layout_width="368dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="@string/recipe_ingredients_label"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
-    </LinearLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_ingredients"
+        <fragment
+            android:id="@+id/ingredients_fragment"
+            android:name="com.roberts.adrian.bakeit.fragments.DetailsFragment"
+            tools:layout="@layout/fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>-->
+    <FrameLayout
+        android:id="@+id/ingredients_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_gravity="center_horizontal"
+            />
 
-    </android.support.v7.widget.RecyclerView>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_steps_descriptions"
+    </FrameLayout>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        android:id="@+id/steps_container"
+        android:layout_gravity="center_horizontal">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_gravity="center_horizontal"
+            />
 
-    </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+    <!--    <LinearLayout
+            android:id="@+id/containter_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <fragment
+                android:id="@+id/steps_fragment"
+                android:name="com.roberts.adrian.bakeit.fragments.DetailsFragment"
+                tools:layout="@layout/fragment_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>-->
 </LinearLayout>
+

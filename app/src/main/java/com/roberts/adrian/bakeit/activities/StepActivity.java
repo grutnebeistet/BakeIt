@@ -58,6 +58,7 @@ public class StepActivity extends AppCompatActivity implements
 
     SimpleExoPlayer mPlayer;
 
+
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
@@ -87,7 +88,8 @@ public class StepActivity extends AppCompatActivity implements
         // Initialize the Media Session.
         initializeMediaSession();
 
-        if (Uri.EMPTY.equals(mStepVideoUrl)) {
+        if (mStepVideoUrl == null ||
+                Uri.EMPTY.equals(mStepVideoUrl)) {
             Toast.makeText(this, "Missing video for this step", Toast.LENGTH_LONG).show();
 
         } else {
@@ -143,8 +145,9 @@ public class StepActivity extends AppCompatActivity implements
 
     }
 
-    private void initializePlayer(Uri mediaUri) {
 
+    private void initializePlayer(Uri mediaUri) {
+        Log.i(TAG, "initPlayer");
         if (mPlayer == null) {
             TrackSelection.Factory adaptiveTrackSelectionFactory =
                     new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);

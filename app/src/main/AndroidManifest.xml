@@ -29,13 +29,10 @@
             android:name=".sync.RecipesSyncIntentService"
             android:exported="false" />
 
-        <activity android:name=".activities.RecipeDetailsActivity" />
-
         <activity
             android:name=".activities.StepActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"></activity>
+        <activity android:name=".activities.RecipeDetailzActivity"></activity>
     </application>
 
 </manifest>

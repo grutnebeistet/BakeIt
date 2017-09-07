@@ -1,17 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/vanillaWhite"
+    android:orientation="vertical"
+    android:gravity="center"
     android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/widget_recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:textColor="@color/colorAccent"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorText"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
         android:textStyle="bold|italic"
         tools:text="Drit med ost"/>
@@ -29,12 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:layout_alignBottom="@id/widget_image"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorText"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
         android:textStyle="bold|italic"
+        android:layout_marginBottom="8dp"
         tools:text="Servings: 8"/>
-</RelativeLayout>
+</LinearLayout>

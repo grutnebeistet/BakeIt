@@ -37,7 +37,7 @@ public class BakeitWidgetProvider extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
 
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
 
             // Open mainactivity when title clicked TODO
 
@@ -78,7 +78,7 @@ public class BakeitWidgetProvider extends AppWidgetProvider {
         intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipeName);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.bakeit_widget_grid_item);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         //TODO set text and image?
         return views;

@@ -8,7 +8,7 @@
     <string name="steps_bundle_video_url">videoURL</string>
     <string name="steps_bundle_image_url">imageURL</string>
 
-    <string name="recipe_servings" formatted="true">Servings: %s</string>
+    <string name="recipe_servings" formatted="true">Serves %s</string>
 
 
 

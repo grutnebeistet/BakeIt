@@ -75,9 +75,9 @@ public class GridWidgetService extends RemoteViewsService {
             String servings = mCursor.getString(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS));
             String imageUrl = mCursor.getString(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE));
 
-            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.bakeit_widget_grid_item);
+            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
 
-            views.setTextViewText(R.id.list_item_recipe_name, recipeName);
+            views.setTextViewText(R.id.widget_recipe_name, recipeName);
             views.setTextViewText(R.id.widget_recipe_servings, getString(R.string.recipe_servings, servings));
             if (!(imageUrl == null || imageUrl.isEmpty())) {
                 Log.i(GridWidgetService.class.getSimpleName(), "imageurl OK");

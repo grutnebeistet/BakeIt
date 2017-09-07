@@ -2,21 +2,28 @@ package com.roberts.adrian.bakeit.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.fragments.DetailsFragment;
+import com.roberts.adrian.bakeit.fragments.DetailsStepsFragment;
+import com.squareup.picasso.Picasso;
+
+import static com.roberts.adrian.bakeit.R.drawable.defaul_baking_step;
 
 /**
  * Created by Adrian on 30/07/2017.
  */
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
+    private static final String LOG_TAG = StepsAdapter.class.getSimpleName();
     private Context mContext;
     private Cursor mCursor;
 
@@ -36,7 +43,18 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder(StepsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+        String stepShortDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+        String stepThumbnail = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_IMG);
+
+        Uri imageUri = stepThumbnail == null ? Uri.parse("") : Uri.parse(stepThumbnail);
+        // Current JSON provides no images - setting a default placeholder for now
+        Picasso.with(mContext)
+                .load(imageUri).fit()
+                .placeholder(defaul_baking_step)
+                .error(defaul_baking_step)
+                .centerCrop()
+                .into(holder.imageViewStepThumbnail);
+
         holder.stepDescriptionTv.setText(stepShortDescription);
 
     }
@@ -60,10 +78,12 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView stepDescriptionTv;
+        ImageView imageViewStepThumbnail;
 
         StepsViewHolder(View view) {
             super(view);
             stepDescriptionTv = (TextView) view.findViewById(R.id.tv_step_descr);
+            imageViewStepThumbnail = (ImageView)view.findViewById(R.id.image_view_step_image);
             view.setOnClickListener(this);
 
         }
@@ -72,12 +92,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         public void onClick(View v) {
             if (mCursor.isClosed()) return;
             mCursor.moveToPosition(getAdapterPosition());
+            Log.i(LOG_TAG, "adapterPos: " + getAdapterPosition());
+
 
             Bundle stepDetailsBundle = new Bundle();
-            String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
-            String stepDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_DESC);
-            String stepVideoUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_VIDEO);
-            String stepImageUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_IMG);
+            String stepShortDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+            String stepDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_DESC);
+            String stepVideoUrl = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_VIDEO);
+            String stepImageUrl = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_IMG);
 
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_title), stepShortDescription);
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_description), stepDescription);

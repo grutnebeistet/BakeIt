@@ -138,6 +138,8 @@ public class RecipesContentProvider extends ContentProvider {
             Log.e(LOG_TAG, "insertion failed for " + uri);
             return null;
         }
+        //
+        getContext().getContentResolver().notifyChange(uri, null);
         // Return Uri for newly added data
         return ContentUris.withAppendedId(uri, newRowId);
     }

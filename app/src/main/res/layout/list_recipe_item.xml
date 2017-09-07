@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list_item"
+    android:id="@+id/list_item_recipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal">
+    android:layout_margin="16dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginTop="2dp"
+    android:background="@drawable/elevation_rect"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    card_view:cardBackgroundColor="@color/vanillaWhite"
+    card_view:cardCornerRadius="8dp">
 
-    <ImageView
-        android:layout_width="322dp"
-        android:layout_height="217dp"
-        android:src="@mipmap/ic_pink_frame_noshape"
-        android:scaleType="centerCrop"
-        android:layout_centerInParent="true"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/recipe_image"/>
-    <TextView
-        android:id="@+id/textview_recipe_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        android:textColor="@android:color/black"
-        tools:text="SATANS BAKEVERK" />
+        <ImageView
+            android:id="@+id/image_view_recipe_image"
+            android:layout_width="230dp"
+            android:layout_height="115dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_recipe_image" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center|center_horizontal"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/list_item_recipe_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textColor="@color/colorText"
+                tools:text="BAKEVERK" />
+
+            <TextView
+                android:id="@+id/list_item_recipe_servings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textColor="@color/colorText"
+                tools:text="Servings: 8" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

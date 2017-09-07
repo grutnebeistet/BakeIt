@@ -6,11 +6,10 @@
     android:id="@+id/container_main">
 
     <fragment
-        android:id="@+id/master_list_fragment"
-        android:name="com.roberts.adrian.bakeit.fragments.RecipeListFragment"
-
+        android:id="@+id/recipes"
+        android:name="com.roberts.adrian.bakeit.fragments.RecipesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_list" />
+        android:layout="@layout/fragment_recipe_list"/>
 </FrameLayout>
 

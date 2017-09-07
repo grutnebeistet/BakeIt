@@ -22,14 +22,14 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_RECIPES_TABLE =
-                "CREATE TABLE " + TABLE_RECIPES + " (" +
+                "CREATE TABLE IF NOT EXISTS " + TABLE_RECIPES + " (" +
                         COLUMN_RECIPE_ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
                         COLUMN_RECIPE_SERVINGS + " INTEGER, " +
                         COLUMN_RECIPE_IMAGE + " TEXT" +
                         ");";
         final String SQL_CREATE_INGREDIENTS_TABLE =
-                "CREATE TABLE " + TABLE_INGREDIENTS + " (" +
+                "CREATE TABLE IF NOT EXISTS " + TABLE_INGREDIENTS + " (" +
                         COLUMN_INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_INGREDIENT_NAME + " TEXT NOT NULL, " +
                         COLUMN_INGREDIENT_MEASURE + " TEXT NOT NULL, " +
@@ -38,7 +38,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                         "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID + ")" +
                         ");";
         final String SQL_CREATE_STEPS_TABLE =
-                "CREATE TABLE " + TABLE_STEPS + " (" +
+                "CREATE TABLE IF NOT EXISTS " + TABLE_STEPS + " (" +
                         COLUMN_STEP_ID + " TEXT PRIMARY KEY, " +
                         COLUMN_STEP_DESCR + " TEXT, " +
                         COLUMN_STEP_SHORT_DESCR + " TEXT, " +

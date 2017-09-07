@@ -8,8 +8,8 @@
     <string name="steps_bundle_video_url">videoURL</string>
     <string name="steps_bundle_image_url">imageURL</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recipe_servings" formatted="true">Servings: %s</string>
+
 
 
 </resources>

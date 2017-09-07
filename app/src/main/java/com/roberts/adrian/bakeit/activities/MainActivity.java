@@ -17,8 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // TODO førstegans lunch ingenting vises? fiks
         Log.i(LOG_TAG, "oncreate");
 
         Boolean connection = NetworkUtils.workingConnection(this);

@@ -4,21 +4,31 @@
     android:id="@+id/list_item_step_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:orientation="vertical">
 
-
-    <ImageView
-        android:layout_width="248dp"
-        android:layout_height="167dp"
-        android:src="@mipmap/ic_pink_frame_noshape"
-        android:layout_centerInParent="true"/>
-    <TextView
-        android:id="@+id/tv_step_descr"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
         android:layout_centerInParent="true"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        tools:text="(step desc)" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="275dp"
+            android:layout_height="220dp"
+            android:id="@+id/image_view_step_image"
+            android:src="@drawable/defaul_baking_step"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tv_step_descr"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="4dp"
+            android:textColor="@color/colorText"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            tools:text="(step desc)" />
+    </LinearLayout>
 
 </RelativeLayout>

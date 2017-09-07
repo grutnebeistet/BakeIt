@@ -3,6 +3,8 @@ package com.roberts.adrian.bakeit.activities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +55,8 @@ public class StepActivity extends AppCompatActivity implements
     TextView mDescriptionTextView;
     @BindView(R.id.step_details_title)
     TextView mTitleTextView;
-
+    @BindView(R.id.image_view_no_video)
+    ImageView mNoVideoImageView;
     @BindView(R.id.playerView)
     SimpleExoPlayerView mExoVideoPlayerView;
 
@@ -69,9 +73,9 @@ public class StepActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_step);
         ButterKnife.bind(this);
 
-
         View rootView = findViewById(R.id.root_step_layout);
         rootView.setOnClickListener(this);
+
         // mExoVideoPlayerView.setControllerVisibilityListener(this);
         //mExoVideoPlayerView.requestFocus();
 
@@ -79,39 +83,35 @@ public class StepActivity extends AppCompatActivity implements
         mStepTitle = stepDescriptions.getString(getString(R.string.steps_bundle_title));
         setTitle(mStepTitle);
         mStepDescription = stepDescriptions.getString(getString(R.string.steps_bundle_description));
-        mStepVideoUrl = Uri.parse(stepDescriptions.getString(getString(R.string.steps_bundle_video_url)));
+        try {
+            mStepVideoUrl = Uri.parse(stepDescriptions.getString(getString(R.string.steps_bundle_video_url)));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
 
         //  mTitleTextView.setText(mStepTitle);
         mDescriptionTextView.setText(mStepDescription);
+
+        Bitmap defaultArtwork = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_empty_video);
+      //  mExoVideoPlayerView.setDefaultArtwork(defaultArtwork);
 
         // Initialize the Media Session.
         initializeMediaSession();
 
         if (mStepVideoUrl == null ||
                 Uri.EMPTY.equals(mStepVideoUrl)) {
-            Toast.makeText(this, "Missing video for this step", Toast.LENGTH_LONG).show();
+            mNoVideoImageView.setVisibility(View.VISIBLE);
+            mExoVideoPlayerView.setVisibility(View.GONE);
+            Toast.makeText(this, "Missing video for this step", Toast.LENGTH_SHORT).show();
 
         } else {
+            mNoVideoImageView.setVisibility(View.GONE);
+            mExoVideoPlayerView.setVisibility(View.VISIBLE);
             initializePlayer(mStepVideoUrl);
             Log.i(TAG, mStepVideoUrl.toString());
         }
 
-
-        /// ned fra her er ExoPlayer demo shit
-/*
-        mHandler = new Handler();
-
-        // 1. Create a default TrackSelector
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector =
-                new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        // 2. Create the player
-        mPlayer =
-                ExoPlayerFactory.newSimpleInstance(this, trackSelector, null);*/
 
     }
 

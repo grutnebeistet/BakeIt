@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.fragments.DetailsFragment;
+import com.roberts.adrian.bakeit.fragments.DetailsIngredientsFragment;
 
 /**
  * Created by Adrian on 30/07/2017.
  */
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder> {
+    private static final String LOG_TAG = IngredientsAdapter.class.getSimpleName();
     private Context mContext;
     private Cursor mCursor;
 
@@ -31,9 +32,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(IngredientsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String ingredientQty = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_QUANTITY);
-        String ingredientMeasure = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_MEASURE);
-        String ingredientName = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_NAME);
+        String ingredientQty = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_QUANTITY);
+        String ingredientMeasure = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_MEASURE);
+        String ingredientName = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_NAME);
         holder.ingredientQty.setText(ingredientQty);
         holder.ingredientMeasure.setText(ingredientMeasure);
         holder.ingredientName.setText(ingredientName);
@@ -57,7 +58,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         notifyDataSetChanged();
     }
 
-    class IngredientsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class IngredientsViewHolder extends RecyclerView.ViewHolder {
         TextView ingredientQty;
         TextView ingredientMeasure;
         TextView ingredientName;
@@ -72,13 +73,5 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         }
 
-        @Override
-        public void onClick(View v) {
-            if (mCursor.isClosed()) return;
-            mCursor.moveToPosition(getAdapterPosition());
-
-
-            //mOnclickHandler.onClick(stepDetailsBundle);
-        }
     }
 }

@@ -1,63 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
- <!--   <LinearLayout
-        android:id="@+id/containter_ingredients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <fragment
-            android:id="@+id/ingredients_fragment"
-            android:name="com.roberts.adrian.bakeit.fragments.DetailsFragment"
-            tools:layout="@layout/fragment_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
-    <FrameLayout
-        android:id="@+id/ingredients_container"
+    <LinearLayout
+        android:id="@+id/container_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewIngredients"
+        android:background="@drawable/details_background"
+        android:orientation="vertical">
+        <!--android:background="@drawable/details_background">-->
+
+        <FrameLayout
+            android:id="@+id/details_ingredients_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout="@layout/fragment_details_ingredients">
 
-    </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/steps_container"
-        android:layout_gravity="center_horizontal">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewSteps"
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/details_steps_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout="@layout/fragment_details_steps">
 
-    </FrameLayout>
+        </FrameLayout>
 
-    <!--    <LinearLayout
-            android:id="@+id/containter_steps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
 
-            <fragment
-                android:id="@+id/steps_fragment"
-                android:name="com.roberts.adrian.bakeit.fragments.DetailsFragment"
-                tools:layout="@layout/fragment_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>-->
-</LinearLayout>
-
+    </LinearLayout>
+</ScrollView>

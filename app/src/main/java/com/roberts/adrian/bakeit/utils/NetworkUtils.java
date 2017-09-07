@@ -23,6 +23,7 @@ import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_I
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_INGREDIENT_NAME;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_INGREDIENT_QUANTITY;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ID;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_STEP_DESCR;
@@ -57,9 +58,12 @@ public class NetworkUtils {
             int recipe_id = recipeJsonObject.getInt("id");
             String recipe_name = recipeJsonObject.getString("name");
             int recipe_servings = recipeJsonObject.getInt("servings");
+            String recipe_image = recipeJsonObject.getString("image");
+            if(recipe_image.isEmpty()) recipe_image = null;
             Log.i(LOG_TAG, "rec name " + recipe_name);
             recipeValues.put(COLUMN_RECIPE_ID, recipe_id);
             recipeValues.put(COLUMN_RECIPE_NAME, recipe_name);
+            recipeValues.put(COLUMN_RECIPE_IMAGE,recipe_image);
             recipeValues.put(COLUMN_RECIPE_SERVINGS, recipe_servings);
 
             // TODO spør om effektiviteten av insert i hver tab vs evt Bulkinsert
@@ -100,7 +104,8 @@ public class NetworkUtils {
                 String videoURL = stepsObject.isNull("videoURL") ? null : stepsObject.getString("videoURL");
                 String imageURL = stepsObject.isNull("thumbnailURL") ? null : stepsObject.getString("thumbnailURL");
 
-
+                if(imageURL.isEmpty()) imageURL = null;
+                if(videoURL.isEmpty()) videoURL = null;
                 stepsValues.put(COLUMN_STEP_ID, step_id);
                 stepsValues.put(COLUMN_STEP_SHORT_DESCR, shortDescription);
                 stepsValues.put(COLUMN_STEP_DESCR, description);

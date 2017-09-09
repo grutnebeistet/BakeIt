@@ -33,8 +33,12 @@
             android:name=".activities.StepActivity"
             android:theme="@style/AlertTheme" />
         <activity android:name=".activities.RecipeDetailzActivity" />
+        <activity
+            android:name=".activities.FullScreenVideoActivity"
+            android:theme="@style/AppTheme" />
 
-        <receiver android:name=".BakeitWidgetProvider">
+
+        <receiver android:name=".widget.BakeitWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -43,9 +47,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/bakeit_widget_provider_info" />
         </receiver>
+
         <service
-            android:name=".GridWidgetService"
+            android:name=".widget.GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

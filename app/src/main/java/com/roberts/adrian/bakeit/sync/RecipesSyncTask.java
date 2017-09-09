@@ -27,6 +27,10 @@ public class RecipesSyncTask {
 
         } catch (Exception e) {
            e.printStackTrace();
+        }finally {
+           /* // To let espresso know the sync is finished so testing can continue TODO førstegangskjøring
+            MainActivity.mSyncFinished = true;
+            Log.i(LOG_TAG, "finally : syncisfinished");*/
         }
     }
 }

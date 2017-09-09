@@ -1,4 +1,4 @@
-package com.roberts.adrian.bakeit;
+package com.roberts.adrian.bakeit.widget;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.data.RecipeContract;
 
@@ -90,9 +91,11 @@ public class GridWidgetService extends RemoteViewsService {
                     .error(default_recipe_image)
                     .centerCrop()
                     .into();*/
+            // Attach recipe name and Id to the intent so we can open a given recipe's details from the widget
             Bundle extras = new Bundle();
             extras.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipeId);
             extras.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipeName);
+            extras.putBoolean(RecipeDetailzActivity.EXTRA_FROM_WIDGET, true);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
             views.setOnClickFillInIntent(R.id.widget_image, fillInIntent);

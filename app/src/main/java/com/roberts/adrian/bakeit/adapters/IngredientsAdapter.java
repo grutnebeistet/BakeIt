@@ -3,12 +3,14 @@ package com.roberts.adrian.bakeit.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
+import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.fragments.DetailsIngredientsFragment;
 
 /**
@@ -39,23 +41,33 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.ingredientMeasure.setText(ingredientMeasure);
         holder.ingredientName.setText(ingredientName);
 
+
+
     }
 
     @Override
     public IngredientsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_ingredient, parent, false);
         return new IngredientsViewHolder(view);
+
     }
 
     @Override
     public int getItemCount() {
         if (mCursor == null) return 0;
+
         return mCursor.getCount();
     }
 
     public void swapCursor(Cursor data) {
         mCursor = data;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
     }
 
     class IngredientsViewHolder extends RecyclerView.ViewHolder {

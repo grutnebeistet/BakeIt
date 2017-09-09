@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
+import com.roberts.adrian.bakeit.activities.MainActivity;
 import com.roberts.adrian.bakeit.fragments.RecipesFragment;
 import com.squareup.picasso.Picasso;
 
@@ -65,6 +66,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_recipe_item, parent, false);
         return new RecipeViewHolder(view);
+
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        // To let espresso know that the recyclerview is attached to the adapter
+        MainActivity.mSyncFinished = true;
+
     }
 
     @Override

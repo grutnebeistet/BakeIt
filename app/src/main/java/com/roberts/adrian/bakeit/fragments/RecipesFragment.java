@@ -59,11 +59,12 @@ public class RecipesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
+
         // setListAdapter(mAdapter);
         mActivity = getActivity();
 
 
-        mRecipesRecyclerView = (RecyclerView) view.findViewById(R.id.list_view_main);
+        mRecipesRecyclerView = view.findViewById(R.id.list_view_main);
         mRecipeAdapter = new RecipeAdapter(mActivity, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
@@ -89,14 +90,14 @@ public class RecipesFragment extends Fragment
                 landFrame.getVisibility() == View.VISIBLE);
 
         if (savedInstanceState != null) {
-            mCurrentRecipeId = savedInstanceState.getInt("currentPos", 0);
-            mCurrentRecipeName = savedInstanceState.getString("currentRecipe", null);
+            mCurrentRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 0);
+            mCurrentRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
             mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);
             Log.i(LOG_TAG, "Recycler scrolled to " + mCurrentRecipeId);
         }
 
         if (mDualPane) {  // Trenger vel egentlig ikke å vise noen details før klikk
-            showDetails(mCurrentRecipeId, mCurrentRecipeName);
+            showDetails(mCurrentRecipeId, mCurrentRecipeName); // TODO
             Log.i(LOG_TAG, "showdetails for " + mCurrentRecipeName);
         }
 
@@ -106,8 +107,8 @@ public class RecipesFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.i(LOG_TAG, "onSaved");
-        outState.putInt("currentPos", mCurrentRecipeId);
-        outState.putString("currentRecipe", mCurrentRecipeName);
+        outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mCurrentRecipeId);
+        outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mCurrentRecipeName);
 
     }
 
@@ -117,11 +118,13 @@ public class RecipesFragment extends Fragment
         Log.i(LOG_TAG, "onResume");
         mActivity.getLoaderManager().restartLoader(LOADER_ID, null, this);
 
+
     }
 
     @Override
     public void onClick(int recipe_id, String recipe_name) {
         showDetails(recipe_id, recipe_name);
+
 
     }
 
@@ -166,6 +169,7 @@ public class RecipesFragment extends Fragment
             intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe_name); // TODO heller sende inn  bundle slik som step?
 
             startActivity(intent);
+
         }
     }
 
@@ -182,8 +186,9 @@ public class RecipesFragment extends Fragment
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
-
+        Log.i(LOG_TAG, "data size " + data.getCount());
         mRecipeAdapter.swapCursor(data);
+
     }
 
     @Override

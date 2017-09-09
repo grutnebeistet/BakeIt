@@ -37,6 +37,7 @@ import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_S
  */
 
 public class NetworkUtils {
+    private static final int DELAY_MILLIS = 3000;
 
     private final static String LOG_TAG = NetworkUtils.class.getSimpleName();
     public static final String QUERY_URL =
@@ -117,12 +118,15 @@ public class NetworkUtils {
             }
 
 
+
             // contentValues[i] = recipeValues;
         }
         // return contentValues;
     }
 
     public static String getResponseFromHttpUrl(String url) throws IOException {
+
+
         URL queryUrl = createUrlFromString(url);
         String jsonResponse = null;
         HttpURLConnection httpURLConnection = (HttpURLConnection) queryUrl.openConnection();

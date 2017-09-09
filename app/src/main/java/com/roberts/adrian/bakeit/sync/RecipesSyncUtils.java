@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.roberts.adrian.bakeit.data.RecipeContract;
 import com.roberts.adrian.bakeit.data.RecipeDbHelper;
@@ -35,21 +33,13 @@ public class RecipesSyncUtils {
         Thread checkForEmpty = new Thread(new Runnable() {
             @Override
             public void run() {
-                Uri recipesUri = RecipeContract.RecipeEntry.CONTENT_URI_RECIPE;
-
-                String[] projectionCols = new String[]{RecipeContract.RecipeEntry.COLUMN_RECIPE_ID};
-                String selStatement = RecipeContract.RecipeEntry._ID + " = ?";
-
-              //  Cursor cursor = context.getContentResolver().query(recipesUri, projectionCols, null, null, null);
-
                 RecipeDbHelper dbHelper = new RecipeDbHelper(context);
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
                 Cursor cursor = db.query(RecipeContract.RecipeEntry.TABLE_RECIPES,null,null,null,null,null,null);
-                // TODO query only id
+                // TODO query only id_
 
                 if (cursor == null || cursor.getCount() == 0) {
-                    Log.i("checkForEmpty", "EEEMPPPTYY\nStarting immediatesync");
                     startImmediateSync(context);
                     cursor.close();
                     db.close();

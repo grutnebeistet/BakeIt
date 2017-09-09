@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
+import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.fragments.DetailsStepsFragment;
 import com.squareup.picasso.Picasso;
 
@@ -38,6 +39,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         mContext = context;
         mOnclickHandler = clickHandler;
 
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        // To let espresso know that the recyclerview is attached to the adapter
+        RecipeDetailzActivity.mSyncFinished = true;
+        Log.i(LOG_TAG, "RecipeDetailzActivity.mSyncFinished = true;");
     }
 
     @Override

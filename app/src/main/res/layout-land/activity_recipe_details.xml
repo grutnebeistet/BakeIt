@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/container_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/details_background"
+        android:orientation="vertical">
+        <!--android:background="@drawable/details_background">-->
+
+        <FrameLayout
+            android:id="@+id/details_ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/fragment_details_ingredients">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/details_steps_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/fragment_details_steps">
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+</ScrollView>

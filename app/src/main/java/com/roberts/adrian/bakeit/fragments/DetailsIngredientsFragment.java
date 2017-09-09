@@ -28,6 +28,8 @@ import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_
 public class DetailsIngredientsFragment extends android.app.Fragment
         implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
+
+
     private static final String LOG_TAG = DetailsIngredientsFragment.class.getSimpleName();
     private IngredientsAdapter mIngredientsAdapter;
     private RecyclerView mRecyclerViewIngredients;
@@ -70,6 +72,7 @@ public class DetailsIngredientsFragment extends android.app.Fragment
         Log.i(LOG_TAG, "onCreateView");
 
 
+        
         if (getArguments() != null) {
             mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
 
@@ -95,6 +98,7 @@ public class DetailsIngredientsFragment extends android.app.Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
 
         Log.i(LOG_TAG, "onActCreated: " + mRecipeName);
         if (savedInstanceState != null) {
@@ -144,4 +148,6 @@ public class DetailsIngredientsFragment extends android.app.Fragment
         super.onResume();
         mActivity.getLoaderManager().restartLoader(LOADER_ID_INGREDIENTS, null, this);
     }
+
+
 }

@@ -76,7 +76,7 @@ public class DetailsStepsFragment extends android.app.Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            Log.i(LOG_TAG, "onCreate");
+        Log.i(LOG_TAG, "onCreate");
         mActivity = getActivity();
         ButterKnife.bind(mActivity);
 
@@ -151,9 +151,12 @@ public class DetailsStepsFragment extends android.app.Fragment
         Log.i(LOG_TAG, "oncreateLoader");
 
         if (id == LOADER_ID_STEPS) {
+
+
             Log.i(LOG_TAG, "Loader: mRecipeId: " + mRecipeId);
             return new android.content.CursorLoader(getActivity(), CONTENT_URI_STEPS,
                     PROJECTION_STEPS, selection, selArgs, null);
+
         }
 
         return null;

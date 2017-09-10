@@ -56,13 +56,16 @@ public class RecipesFragment extends Fragment
     private String mCurrentRecipeName;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
-
-        // setListAdapter(mAdapter);
         mActivity = getActivity();
-
+        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
         mRecipesRecyclerView = view.findViewById(R.id.list_view_main);
         mRecipeAdapter = new RecipeAdapter(mActivity, this);
@@ -70,36 +73,37 @@ public class RecipesFragment extends Fragment
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         mRecipesRecyclerView.setLayoutManager(layoutManager);
         mRecipesRecyclerView.setAdapter(mRecipeAdapter);
-
+        // mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);//TODO int scrollPos
         mActivity.getLoaderManager().initLoader(LOADER_ID, null, this);
 
 
         return view;
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
-
         super.onActivityCreated(savedInstanceState);
 
         View landFrame = mActivity.findViewById(R.id.main_landscape);
-
         mDualPane = (landFrame != null &&
                 landFrame.getVisibility() == View.VISIBLE);
-
         if (savedInstanceState != null) {
             mCurrentRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 0);
             mCurrentRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
-            mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);
+
             Log.i(LOG_TAG, "Recycler scrolled to " + mCurrentRecipeId);
+            showDetails(mCurrentRecipeId, mCurrentRecipeName);
+
         }
 
-        if (mDualPane) {  // Trenger vel egentlig ikke å vise noen details før klikk
+
+
+
+     /*   if (mDualPane) {  // Trenger vel egentlig ikke å vise noen details før klikk
             showDetails(mCurrentRecipeId, mCurrentRecipeName); // TODO
             Log.i(LOG_TAG, "showdetails for " + mCurrentRecipeName);
-        }
+        }*/
 
     }
 
@@ -116,7 +120,7 @@ public class RecipesFragment extends Fragment
     public void onResume() {
         super.onResume();
         Log.i(LOG_TAG, "onResume");
-        mActivity.getLoaderManager().restartLoader(LOADER_ID, null, this);
+        mActivity.getLoaderManager().initLoader(LOADER_ID, null, this);
 
 
     }
@@ -124,9 +128,11 @@ public class RecipesFragment extends Fragment
     @Override
     public void onClick(int recipe_id, String recipe_name) {
         showDetails(recipe_id, recipe_name);
+        Log.i(LOG_TAG, "dualPane.: " + mDualPane);
 
 
     }
+
 
     private void showDetails(int recipe_id, String recipe_name) {
         mCurrentRecipeId = recipe_id;
@@ -137,7 +143,7 @@ public class RecipesFragment extends Fragment
             // Check what fragments are currently shown and replace it accordingly
 
 
-            DetailsIngredientsFragment ingredients = DetailsIngredientsFragment.newInstance(recipe_id, recipe_name);
+            DetailsFragment ingredients = DetailsFragment.newInstance(recipe_id, recipe_name);
 
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
@@ -147,13 +153,13 @@ public class RecipesFragment extends Fragment
             //ft.commit();
 
 
-            DetailsStepsFragment steps = DetailsStepsFragment.newInstance(recipe_id, recipe_name);
+        /*    DetailsStepsFragment steps = DetailsStepsFragment.newInstance(recipe_id, recipe_name);
 
             // Execute a transaction, replacing any existing fragment
             // with this one inside the frame.
 
             ft.replace(R.id.details_steps_container, steps);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);*/
             ft.commit();
             mActivity.findViewById(R.id.scrollview_details).setScrollY(0);
 
@@ -187,14 +193,14 @@ public class RecipesFragment extends Fragment
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         Log.i(LOG_TAG, "data size " + data.getCount());
-        mRecipeAdapter.swapCursor(data);
+        if (mRecipeAdapter != null) mRecipeAdapter.swapCursor(data);
 
     }
 
     @Override
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
         //mAdapter.swapCursor(null);
-        mRecipeAdapter.swapCursor(null);
+        if (mRecipeAdapter != null) mRecipeAdapter.swapCursor(null);
     }
 
 }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
-import com.roberts.adrian.bakeit.fragments.DetailsIngredientsFragment;
+import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 
 /**
  * Created by Adrian on 30/07/2017.
@@ -28,20 +28,28 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public IngredientsAdapter(Context context) {
         mContext = context;
         //  mOnclickHandler = clickHandler;
+        Log.i(LOG_TAG, "IngredientsAdapter");
+    }
+
+    @Override
+    public void onViewAttachedToWindow(IngredientsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        Log.i(LOG_TAG, "onViewAttachedToWindow");
+
+        RecipeDetailzActivity.mIngredientsLoadingIdle = true;
 
     }
 
     @Override
     public void onBindViewHolder(IngredientsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String ingredientQty = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_QUANTITY);
-        String ingredientMeasure = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_MEASURE);
-        String ingredientName = mCursor.getString(DetailsIngredientsFragment.INDEX_INGREDIENT_NAME);
+        String ingredientQty = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_QUANTITY);
+        String ingredientMeasure = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_MEASURE);
+        String ingredientName = mCursor.getString(DetailsFragment.INDEX_INGREDIENT_NAME);
         holder.ingredientQty.setText(ingredientQty);
         holder.ingredientMeasure.setText(ingredientMeasure);
         holder.ingredientName.setText(ingredientName);
-
-
+        Log.i(LOG_TAG, "onBindViewHolder");
 
     }
 
@@ -67,10 +75,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        Log.i(LOG_TAG, "onAttachedToRecyclerView");
 
     }
 
-    class IngredientsViewHolder extends RecyclerView.ViewHolder {
+    public class IngredientsViewHolder extends RecyclerView.ViewHolder {
         TextView ingredientQty;
         TextView ingredientMeasure;
         TextView ingredientName;
@@ -82,6 +91,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             ingredientMeasure = (TextView) view.findViewById(R.id.ingredient_measure);
             ingredientName = (TextView) view.findViewById(R.id.ingredient_name);
             // view.setOnClickListener(this);
+
 
         }
 

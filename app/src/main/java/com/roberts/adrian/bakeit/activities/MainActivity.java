@@ -16,10 +16,10 @@ public class MainActivity extends AppCompatActivity {
     public static boolean mSyncFinished;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Log.i(LOG_TAG, "oncreate");
@@ -32,11 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
     @VisibleForTesting
-    public static boolean isSyncFinished(){
+    public static boolean isSyncFinished() {
         return mSyncFinished;
     }
-
 
 
 }

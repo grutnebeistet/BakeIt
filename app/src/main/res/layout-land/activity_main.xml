@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_landscape"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_landscape"
     android:orientation="horizontal">
 
 
@@ -15,16 +15,16 @@
         android:layout="@layout/fragment_recipe_list" />
 
     <ScrollView
+        android:id="@+id/scrollview_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:id="@+id/scrollview_details">
+        android:layout_weight="1">
 
         <!--<include layout="@layout/activity_recipe_details"/>-->
         <LinearLayout
+            android:id="@+id/container_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/container_details"
             android:orientation="vertical">
 
 
@@ -32,13 +32,13 @@
                 android:id="@+id/details_ingredients_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout="@layout/fragment_details_ingredients" />
-
-            <FrameLayout
-                android:id="@+id/details_steps_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout="@layout/fragment_details_steps" />
+                android:layout="@layout/fragment_details" />
+            <!--
+                        <FrameLayout
+                            android:id="@+id/details_steps_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout="@layout/fragment_details_steps" />-->
 
         </LinearLayout>
     </ScrollView>

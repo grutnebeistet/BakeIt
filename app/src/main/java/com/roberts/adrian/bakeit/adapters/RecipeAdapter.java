@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         String recipeName = mCursor.getString(RecipesFragment.INDEX_RECIPE_NAME);
         String recipeServings = mCursor.getString(RecipesFragment.INDEX_RECIPE_SERVINGS);
         String recipeImage = mCursor.getString(RecipesFragment.INDEX_RECIPE_IMAGE);
+
+        int id = mCursor.getInt(RecipesFragment.INDEX_RECIPE_ID);
+        Log.i(LOG_TAG, "pos: " + position + " id: " + id);
 
         holder.tvRecipeName.setText(recipeName);
         holder.tvServings.setText(mContext.getString(R.string.recipe_servings,recipeServings));

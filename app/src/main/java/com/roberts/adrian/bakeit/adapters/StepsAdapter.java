@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
-import com.roberts.adrian.bakeit.fragments.DetailsStepsFragment;
+import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import static com.roberts.adrian.bakeit.R.drawable.defaul_baking_step;
@@ -44,16 +44,15 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        // To let espresso know that the recyclerview is attached to the adapter
-        RecipeDetailzActivity.mSyncFinished = true;
-        Log.i(LOG_TAG, "RecipeDetailzActivity.mSyncFinished = true;");
+
+
     }
 
     @Override
     public void onBindViewHolder(StepsViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String stepShortDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
-        String stepThumbnail = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_IMG);
+        String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+        String stepThumbnail = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_IMG);
 
         Uri imageUri = stepThumbnail == null ? Uri.parse("") : Uri.parse(stepThumbnail);
         // Current JSON provides no images - setting a default placeholder for now
@@ -66,6 +65,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
         holder.stepDescriptionTv.setText(stepShortDescription);
 
+
+
     }
 
     @Override
@@ -77,6 +78,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public int getItemCount() {
         if (mCursor == null) return 0;
+
         return mCursor.getCount();
     }
 
@@ -84,6 +86,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         mCursor = data;
         notifyDataSetChanged();
     }
+
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView stepDescriptionTv;
@@ -94,7 +97,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             stepDescriptionTv = (TextView) view.findViewById(R.id.tv_step_descr);
             imageViewStepThumbnail = (ImageView)view.findViewById(R.id.image_view_step_image);
             view.setOnClickListener(this);
-
+       //    Log.i(LOG_TAG, "sync FINISHED");
+            RecipeDetailzActivity.mStepsLoadingIdle = true;
         }
 
         @Override
@@ -105,10 +109,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
 
             Bundle stepDetailsBundle = new Bundle();
-            String stepShortDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
-            String stepDescription = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_DESC);
-            String stepVideoUrl = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_VIDEO);
-            String stepImageUrl = mCursor.getString(DetailsStepsFragment.PROJECTION_INDEX_STEP_IMG);
+            String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
+            String stepDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_DESC);
+            String stepVideoUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_VIDEO);
+            String stepImageUrl = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_IMG);
 
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_title), stepShortDescription);
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_description), stepDescription);

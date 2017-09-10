@@ -29,7 +29,7 @@ public class RecipesSyncTask {
            e.printStackTrace();
         }finally {
            /* // To let espresso know the sync is finished so testing can continue TODO førstegangskjøring
-            MainActivity.mSyncFinished = true;
+            MainActivity.mStepsLoadingIdle = true;
             Log.i(LOG_TAG, "finally : syncisfinished");*/
         }
     }

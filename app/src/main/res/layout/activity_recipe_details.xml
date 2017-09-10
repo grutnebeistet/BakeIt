@@ -10,21 +10,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/details_background"
         android:orientation="vertical">
+
         <!--android:background="@drawable/details_background">-->
 
-        <FrameLayout
+       <FrameLayout
             android:id="@+id/details_ingredients_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout="@layout/fragment_details_ingredients">
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/details_steps_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout="@layout/fragment_details_steps">
+            android:layout="@layout/fragment_details">
 
         </FrameLayout>
 

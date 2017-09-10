@@ -69,7 +69,7 @@ public class StepActivity extends AppCompatActivity implements
         }
 
 
-        //  mTitleTextView.setText(mStepTitle);
+          mTitleTextView.setText(mStepTitle);
         mDescriptionTextView.setText(mStepDescription);
 
 
@@ -97,10 +97,15 @@ public class StepActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        ExoPlayerVideoHandler.getInstance()
-                .prepareExoPlayerForUri(mRootView.getContext(),
-                        Uri.parse(mStringVideoUrl), mExoVideoPlayerView);
-        ExoPlayerVideoHandler.getInstance().goToForeground();
+        try {
+            ExoPlayerVideoHandler.getInstance()
+                    .prepareExoPlayerForUri(mRootView.getContext(),
+                            Uri.parse(mStringVideoUrl), mExoVideoPlayerView);
+            ExoPlayerVideoHandler.getInstance().goToForeground();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
 
         mRootView.findViewById(R.id.exo_fullscreen).setOnClickListener(new View.OnClickListener() {
             @Override

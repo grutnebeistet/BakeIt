@@ -7,8 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.roberts.adrian.bakeit.R;
-import com.roberts.adrian.bakeit.fragments.DetailsIngredientsFragment;
-import com.roberts.adrian.bakeit.fragments.DetailsStepsFragment;
+import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 
 public class RecipeDetailzActivity extends AppCompatActivity {
     private static final String LOG_TAG = RecipeDetailzActivity.class.getSimpleName();
@@ -17,12 +16,16 @@ public class RecipeDetailzActivity extends AppCompatActivity {
     public static final String EXTRA_FROM_WIDGET = "com.roberts.adrian.bakeit.extra.FROM_WIDGET";
 
     // for testing with idlingResource
-    public static boolean mSyncFinished;
+    public static boolean mStepsLoadingIdle;
+    public static boolean mIngredientsLoadingIdle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        boolean fromWidget = getIntent().getExtras().getBoolean(EXTRA_FROM_WIDGET,false);
+
+
+        boolean fromWidget = getIntent().getExtras().getBoolean(EXTRA_FROM_WIDGET, false);
 
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -36,29 +39,24 @@ public class RecipeDetailzActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_recipe_details);
-            Log.i(LOG_TAG, "setting up frags..");
+            Log.i(LOG_TAG, "setting up detail frag..");
 
-            DetailsIngredientsFragment ingredientsDetails = new DetailsIngredientsFragment();
-            ingredientsDetails.setArguments(getIntent().getExtras());
+            DetailsFragment details = new DetailsFragment();
+            details.setArguments(getIntent().getExtras());
 
 
             getFragmentManager().beginTransaction().
-                    add(R.id.details_ingredients_container, ingredientsDetails).
-                    commit();
-
-            DetailsStepsFragment stepsDetails = new DetailsStepsFragment();
-            //if (stepsDetails )
-            stepsDetails.setArguments(getIntent().getExtras());
-            getFragmentManager().beginTransaction().
-                    add(R.id.details_steps_container, stepsDetails).
+                    add(R.id.details_ingredients_container, details).
                     commit();
 
 
         }
 
     }
+
     @VisibleForTesting
-    public boolean isSyncFinished(){
-        return mSyncFinished;
+    public boolean isSyncFinished() {
+        Log.i(LOG_TAG, "isSynchFinished: " + (mIngredientsLoadingIdle && mStepsLoadingIdle));
+        return mIngredientsLoadingIdle && mStepsLoadingIdle;
     }
 }

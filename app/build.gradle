@@ -39,10 +39,12 @@ dependencies {
     compile 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
 
     // Testing
+
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:3.0.1')
    // androidTestCompile 'com.android.support.test.espresso:espresso-accessibility:3.0.1'
     androidTestCompile 'com.android.support.test:runner:1.0.1'
+
 
   //  androidTestCompile 'com.21buttons:fragment-test-rule:1.0.0'
     /*androidTestCompile 'com.android.support:support-annotations:26.0.1'

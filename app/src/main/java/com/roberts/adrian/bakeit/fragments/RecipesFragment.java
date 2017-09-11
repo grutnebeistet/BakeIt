@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
@@ -55,6 +56,9 @@ public class RecipesFragment extends Fragment
     private int mCurrentRecipeId;
     private String mCurrentRecipeName;
 
+    private int mCurrentScrollPos = 0;
+    private ScrollView mScrollView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +67,7 @@ public class RecipesFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Log.i(LOG_TAG, "onCreateView");
         mActivity = getActivity();
         View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
@@ -75,7 +79,7 @@ public class RecipesFragment extends Fragment
         mRecipesRecyclerView.setAdapter(mRecipeAdapter);
         // mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);//TODO int scrollPos
         mActivity.getLoaderManager().initLoader(LOADER_ID, null, this);
-
+        mScrollView = view.findViewById(R.id.scroll_testing);
 
         return view;
     }
@@ -89,21 +93,17 @@ public class RecipesFragment extends Fragment
         mDualPane = (landFrame != null &&
                 landFrame.getVisibility() == View.VISIBLE);
         if (savedInstanceState != null) {
+
             mCurrentRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 0);
             mCurrentRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
-
+            mCurrentScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+            Log.i(LOG_TAG, "id: " + mCurrentRecipeId + " name " + mCurrentRecipeName + " SCROLL: " + mCurrentScrollPos);
             Log.i(LOG_TAG, "Recycler scrolled to " + mCurrentRecipeId);
-            showDetails(mCurrentRecipeId, mCurrentRecipeName);
+            if (mCurrentRecipeName != null)
+                showDetails(mCurrentRecipeId, mCurrentRecipeName, mCurrentScrollPos);
 
         }
 
-
-
-
-     /*   if (mDualPane) {  // Trenger vel egentlig ikke å vise noen details før klikk
-            showDetails(mCurrentRecipeId, mCurrentRecipeName); // TODO
-            Log.i(LOG_TAG, "showdetails for " + mCurrentRecipeName);
-        }*/
 
     }
 
@@ -113,6 +113,7 @@ public class RecipesFragment extends Fragment
         Log.i(LOG_TAG, "onSaved");
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mCurrentRecipeId);
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mCurrentRecipeName);
+        outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, mCurrentScrollPos);
 
     }
 
@@ -127,14 +128,27 @@ public class RecipesFragment extends Fragment
 
     @Override
     public void onClick(int recipe_id, String recipe_name) {
-        showDetails(recipe_id, recipe_name);
+        showDetails(recipe_id, recipe_name, 0);
         Log.i(LOG_TAG, "dualPane.: " + mDualPane);
 
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(LOG_TAG,"onDestroyVIEW");
 
-    private void showDetails(int recipe_id, String recipe_name) {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(LOG_TAG,"onDestroy");
+    }
+
+
+    private void showDetails(int recipe_id, String recipe_name, int scrollPos) {
         mCurrentRecipeId = recipe_id;
         mCurrentRecipeName = recipe_name;
 
@@ -150,18 +164,10 @@ public class RecipesFragment extends Fragment
             ft.replace(R.id.details_ingredients_container, ingredients);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
-            //ft.commit();
-
-
-        /*    DetailsStepsFragment steps = DetailsStepsFragment.newInstance(recipe_id, recipe_name);
-
-            // Execute a transaction, replacing any existing fragment
-            // with this one inside the frame.
-
-            ft.replace(R.id.details_steps_container, steps);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);*/
             ft.commit();
-            mActivity.findViewById(R.id.scrollview_details).setScrollY(0);
+
+            //mScrollView.setScrollY(mCurrentScrollPos);
+            //getActivity().findViewById(R.id.scroll_testing).setScrollY(mCurrentScrollPos);
 
         } else {
             // Create an intent for starting the DetailsActivity
@@ -173,6 +179,7 @@ public class RecipesFragment extends Fragment
             // pass the current position
             intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipe_id);
             intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe_name); // TODO heller sende inn  bundle slik som step?
+            intent.putExtra(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,scrollPos);
 
             startActivity(intent);
 

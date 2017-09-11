@@ -28,14 +28,14 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public IngredientsAdapter(Context context) {
         mContext = context;
         //  mOnclickHandler = clickHandler;
-        Log.i(LOG_TAG, "IngredientsAdapter");
+
     }
 
     @Override
     public void onViewAttachedToWindow(IngredientsViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        Log.i(LOG_TAG, "onViewAttachedToWindow");
 
+        // For testing - ingredients are attached to screen
         RecipeDetailzActivity.mIngredientsLoadingIdle = true;
 
     }
@@ -49,7 +49,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.ingredientQty.setText(ingredientQty);
         holder.ingredientMeasure.setText(ingredientMeasure);
         holder.ingredientName.setText(ingredientName);
-        Log.i(LOG_TAG, "onBindViewHolder");
+
 
     }
 

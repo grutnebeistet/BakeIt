@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
@@ -48,6 +49,7 @@ public class DetailsFragment extends android.app.Fragment
     @BindView(R.id.recyclerViewSteps)
     RecyclerView mRecyclerViewSteps;
 
+    private ScrollView mScrollView;
     @BindView(R.id.cooking_steps_label)
     TextView mStepsLabel;
 
@@ -80,6 +82,7 @@ public class DetailsFragment extends android.app.Fragment
     private static final int LOADER_ID_INGREDIENTS = 1348;
     private static final int LOADER_ID_STEPS = 1349;
 
+    private int mScrollPos = 0;
 
     public static DetailsFragment newInstance(int id, String recipe) {
         mRecipeId = id;
@@ -93,11 +96,11 @@ public class DetailsFragment extends android.app.Fragment
 
         return ingredientsFragment;
     }
+    
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
@@ -108,6 +111,7 @@ public class DetailsFragment extends android.app.Fragment
 
         if (getArguments() != null) {
             mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
+            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS);
         } else if (savedInstanceState != null) {
             mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
         }
@@ -124,12 +128,14 @@ public class DetailsFragment extends android.app.Fragment
 
         mStepsLabel = (TextView) view.findViewById(R.id.cooking_steps_label);
         mRecyclerViewSteps = (RecyclerView) view.findViewById(R.id.recyclerViewSteps);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 3);
         mRecyclerViewSteps.setLayoutManager(gridLayoutManager);
         mStepsAdapter = new StepsAdapter(mActivity, this);
         mRecyclerViewSteps.setAdapter(mStepsAdapter);
 
 
+        // get a reference to the scrollview included in the layout(s)
+        mScrollView = view.findViewById(R.id.scroll_testing);
         //   if (savedInstanceState == null) {
         mActivity.getLoaderManager().initLoader(LOADER_ID_INGREDIENTS, null, this);
         mActivity.getLoaderManager().initLoader(LOADER_ID_STEPS, null, this);
@@ -158,6 +164,8 @@ public class DetailsFragment extends android.app.Fragment
         else recipeNameTextView.setVisibility(View.GONE);
 
 
+        mScrollView.setScrollY(mScrollPos);
+        Log.i(LOG_TAG, "setScroll: " + mScrollPos);
     }
 
 
@@ -166,6 +174,7 @@ public class DetailsFragment extends android.app.Fragment
         super.onSaveInstanceState(outState);
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mRecipeName);
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mRecipeId);
+        outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,mScrollPos);
     }
 
     @Override

@@ -14,8 +14,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="275dp"
-            android:layout_height="220dp"
+            android:layout_width="136dp"
+            android:layout_height="110dp"
             android:id="@+id/image_view_step_image"
             android:src="@drawable/defaul_baking_step"
             android:layout_gravity="center_horizontal" />

@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="Cooking steps"
+                android:text="@string/cooking_steps_label"
                 android:textColor="@color/colorText"
                 android:visibility="visible" />
 

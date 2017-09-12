@@ -8,14 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/vanillaWhite">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bakeit now!"
-            android:layout_marginRight="4dp"
+            android:text="@string/widget_header"
+            android:layout_marginEnd="4dp"
             android:background="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorText" />
@@ -24,7 +23,6 @@
             android:id="@+id/widget_grid_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="4dp"
             android:gravity="start" />
     </LinearLayout>
 </FrameLayout>

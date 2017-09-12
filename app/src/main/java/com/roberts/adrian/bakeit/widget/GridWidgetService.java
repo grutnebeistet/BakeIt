@@ -88,9 +88,9 @@ public class GridWidgetService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             if (position == AdapterView.INVALID_POSITION ||
-                    mRecipesCursor == null || mRecipesCursor.getCount() == 0) return null;
+                    getCount() == 0) return null;
 
-            Log.i(GridWidgetService.class.getSimpleName(), "pre cursor");
+
             mRecipesCursor.moveToPosition(position);
 
             int recipeId = mRecipesCursor.getInt(mRecipesCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID));
@@ -100,9 +100,6 @@ public class GridWidgetService extends RemoteViewsService {
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
 
-            Log.i(LOG_TAG, "position: " + position + " recipe: " + recipeName);
-            // Clear previously added ingredient views
-          //  if (position > 0) views.removeAllViews(R.id.widget_ingredient_items);
 
             views.setTextViewText(R.id.widget_recipe_name, recipeName);
             views.setTextViewText(R.id.widget_recipe_servings, getString(R.string.recipe_servings, servings));
@@ -111,22 +108,23 @@ public class GridWidgetService extends RemoteViewsService {
                 views.setImageViewUri(R.id.widget_image, Uri.parse(imageUrl));
             }
 
-            if (mIngredientsCursor == null || mIngredientsCursor.getCount() == 0){
-                Log.i(LOG_TAG, "cursor null: " + (mIngredientsCursor==null));
-                Log.i(LOG_TAG, "cursor c: " + mIngredientsCursor.getCount());
+            if (mIngredientsCursor != null && mIngredientsCursor.getCount() > 0) {
+                // A problem here is that getViewAt get's called twice for the first view/recipe
+                // which seem skew/misplace ingredients TODO / Help
+                while (mIngredientsCursor.moveToNext()) {
+                    String ingredient = mIngredientsCursor.getString(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_INGREDIENT_NAME));
+                    int ingredientFk = mIngredientsCursor.getInt(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID));
+
+                    if (ingredientFk == recipeId && (recipeId == position + 1)) {
+                        // Log.i(LOG_TAG, "ingred: " + ingredient + " FK: " + ingredientFk  + " PK: " + recipeId + " recnam: " + recipeName + " pos: " + position);
+                        RemoteViews ingredientsView = new RemoteViews(getPackageName(), R.layout.widget_ingredients);
+                        ingredientsView.setTextViewText(R.id.widget_ingredient_text_view, ingredient);
+                        views.addView(R.id.widget_ingredient_items, ingredientsView);
+                        Log.i(LOG_TAG, "added: " + ingredient + " for recipe: " + recipeName);
+                    }
+                }
+                mIngredientsCursor.moveToFirst();
             }
-
-            while (mIngredientsCursor.moveToNext() &&
-                    mIngredientsCursor.getInt(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID)) == recipeId) {
-
-                RemoteViews ingredientsView = new RemoteViews(getPackageName(), R.layout.widget_ingredients);
-                String ingredient = mIngredientsCursor.getString(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_INGREDIENT_NAME));
-                ingredientsView.setTextViewText(R.id.widget_ingredient_text_view, ingredient);
-                views.addView(R.id.widget_ingredient_items, ingredientsView);
-                Log.i(LOG_TAG, "added: " + ingredient + " for recipe: " + recipeName);
-
-            }
-
 
             Bundle extras = new Bundle();
             extras.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipeId);

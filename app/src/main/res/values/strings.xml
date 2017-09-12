@@ -9,8 +9,10 @@
     <string name="steps_bundle_image_url" translatable="false">imageURL</string>
 
     <string name="recipe_servings" formatted="true" translatable="true">Serves %s</string>
+    <string name="cooking_steps_label" translatable="true">Cooking steps</string>
 
     <string name="missing_video" translatable="true">Missing video for this step</string>
+    <string name="widget_header" translatable="true">Bake it now!</string>
 
     <!--Testing-->
     <string name="test_details_recipe_name" translatable="false">Brownies</string>

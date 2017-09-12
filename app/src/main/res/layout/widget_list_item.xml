@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
+        android:paddingStart="8dp"
         android:orientation="vertical">
 
         <TextView
@@ -27,15 +28,12 @@
             android:id="@+id/widget_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@id/widget_recipe_name"
-            android:layout_centerHorizontal="true"
             android:src="@drawable/default_recipe_image" />
 
         <TextView
             android:id="@+id/widget_recipe_servings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/colorText"

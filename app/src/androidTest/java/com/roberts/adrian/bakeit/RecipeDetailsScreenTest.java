@@ -12,6 +12,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.roberts.adrian.bakeit.IdlingResource.RecipeDetailsIdlingResource;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 
 import org.hamcrest.Description;
@@ -36,9 +37,9 @@ import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
  */
 @RunWith(AndroidJUnit4.class)
 public class RecipeDetailsScreenTest {
-    private String recipe_name = "Brownies";
-    private int recipe_ide = 2;
-    private final String INGREDIENT = "Bittersweet chocolate (60-70% cacao)";//"100 G light brown sugar";//
+    private String TEST_RECIPE_NAME;
+    private int TEST_RECIPE_ID = 2;
+    private String TEST_INGREDIENT;
     @Rule
     public ActivityTestRule<RecipeDetailzActivity> mActivityTestRule =
             new ActivityTestRule<RecipeDetailzActivity>(RecipeDetailzActivity.class) {
@@ -47,8 +48,8 @@ public class RecipeDetailsScreenTest {
                     Context targetContext = InstrumentationRegistry.getInstrumentation()
                             .getTargetContext();
                     Intent extras = new Intent(targetContext, RecipeDetailzActivity.class);
-                    extras.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe_name);
-                    extras.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipe_ide);
+                    extras.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, TEST_RECIPE_NAME);
+                    extras.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_ID, TEST_RECIPE_ID);
                     extras.putExtra(RecipeDetailzActivity.EXTRA_FROM_WIDGET, false);
                     return extras;
                 }
@@ -57,8 +58,13 @@ public class RecipeDetailsScreenTest {
     private RecipeDetailsIdlingResource mRecipeDetailsIdlingResource;
 
     @Before
+    public void init() {
+        TEST_RECIPE_NAME = mActivityTestRule.getActivity().getString(R.string.test_details_recipe_name);
+        TEST_INGREDIENT = mActivityTestRule.getActivity().getString(R.string.test_details_ingredient);
+    }
+
+    @Before
     public void registerIntentServiceIdlingResource() {
-        //DetailsIngredientsFragment fragment = DetailsIngredientsFragment.newInstance(recipe_ide, recipe_name);
         mRecipeDetailsIdlingResource = new RecipeDetailsIdlingResource(mActivityTestRule.getActivity());
         IdlingRegistry.getInstance().register(mRecipeDetailsIdlingResource);
     }
@@ -69,10 +75,9 @@ public class RecipeDetailsScreenTest {
         onView(withId(R.id.recyclerViewIngredients)).perform(RecyclerViewActions.scrollToPosition(3)).check(
                 matches((isDisplayed())) //withText(INGREDIENT))
         );
-       
+
         onView(withId(R.id.recyclerViewIngredients))
-                .check(matches(atPosition(0, R.id.ingredient_name,withText(INGREDIENT))));
-        // onData(anything()).inAdapterView(withId(R.id.recyclerViewIngredients)).atPosition(0).check(matches(withText(INGREDIENT)));
+                .check(matches(atPosition(0, R.id.ingredient_name, withText(TEST_INGREDIENT))));
 
     }
 

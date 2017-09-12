@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,19 +20,16 @@ import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.adapters.RecipeAdapter;
 import com.roberts.adrian.bakeit.data.RecipeContract;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ID;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_RECIPE;
 
 public class RecipesFragment extends Fragment
         implements android.app.LoaderManager.LoaderCallbacks<Cursor>, RecipeAdapter.RecipeAdapterOnClickHandler {
-    // Define a new interface OnImageClickListener that triggers a callback in the host activity
-    // OnImageClickListener mCallback;
 
-    // @BindView(R.id.recyclerViewMain)
-    //RecyclerView mRecipesRecyclerView;
-    RecipeAdapter mRecipeAdapter;
-    private SimpleCursorAdapter mAdapter;
-    private RecyclerView mRecipesRecyclerView;
 
     private Activity mActivity;
 
@@ -52,34 +48,41 @@ public class RecipesFragment extends Fragment
 
     private final int LOADER_ID = 1347;
 
+    RecipeAdapter mRecipeAdapter;
     private boolean mDualPane;
     private int mCurrentRecipeId;
     private String mCurrentRecipeName;
-
     private int mCurrentScrollPos = 0;
-    private ScrollView mScrollView;
+
+    @Nullable
+    @BindView(R.id.details_scroll_view)
+    ScrollView mScrollView;
+    @BindView(R.id.list_view_main)
+    RecyclerView mRecipesRecyclerView;
+
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onCreateView");
         mActivity = getActivity();
-        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
-        mRecipesRecyclerView = view.findViewById(R.id.list_view_main);
+        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
         mRecipeAdapter = new RecipeAdapter(mActivity, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         mRecipesRecyclerView.setLayoutManager(layoutManager);
         mRecipesRecyclerView.setAdapter(mRecipeAdapter);
-        // mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);//TODO int scrollPos
+
         mActivity.getLoaderManager().initLoader(LOADER_ID, null, this);
-        mScrollView = view.findViewById(R.id.scroll_testing);
 
         return view;
     }
@@ -97,13 +100,11 @@ public class RecipesFragment extends Fragment
             mCurrentRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 0);
             mCurrentRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
             mCurrentScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
-            Log.i(LOG_TAG, "id: " + mCurrentRecipeId + " name " + mCurrentRecipeName + " SCROLL: " + mCurrentScrollPos);
-            Log.i(LOG_TAG, "Recycler scrolled to " + mCurrentRecipeId);
+            mRecipesRecyclerView.smoothScrollToPosition(0);
+
             if (mCurrentRecipeName != null)
                 showDetails(mCurrentRecipeId, mCurrentRecipeName, mCurrentScrollPos);
-
         }
-
 
     }
 
@@ -129,22 +130,12 @@ public class RecipesFragment extends Fragment
     @Override
     public void onClick(int recipe_id, String recipe_name) {
         showDetails(recipe_id, recipe_name, 0);
-        Log.i(LOG_TAG, "dualPane.: " + mDualPane);
-
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.i(LOG_TAG,"onDestroyVIEW");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(LOG_TAG,"onDestroy");
+        unbinder.unbind();
     }
 
 
@@ -153,10 +144,8 @@ public class RecipesFragment extends Fragment
         mCurrentRecipeName = recipe_name;
 
         if (mDualPane) {
-            Log.i(LOG_TAG, "showdetails (dualpane): " + recipe_name);
+
             // Check what fragments are currently shown and replace it accordingly
-
-
             DetailsFragment ingredients = DetailsFragment.newInstance(recipe_id, recipe_name);
 
             FragmentTransaction ft = getFragmentManager()
@@ -165,9 +154,7 @@ public class RecipesFragment extends Fragment
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
             ft.commit();
-
-            //mScrollView.setScrollY(mCurrentScrollPos);
-            //getActivity().findViewById(R.id.scroll_testing).setScrollY(mCurrentScrollPos);
+            mRecipesRecyclerView.smoothScrollToPosition(mCurrentRecipeId);
 
         } else {
             // Create an intent for starting the DetailsActivity
@@ -179,7 +166,7 @@ public class RecipesFragment extends Fragment
             // pass the current position
             intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipe_id);
             intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe_name); // TODO heller sende inn  bundle slik som step?
-            intent.putExtra(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,scrollPos);
+            intent.putExtra(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, scrollPos);
 
             startActivity(intent);
 
@@ -189,12 +176,8 @@ public class RecipesFragment extends Fragment
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME, RecipeContract.RecipeEntry._ID}; // ID?
-
         return new android.content.CursorLoader(getActivity(), CONTENT_URI_RECIPE,
                 MAIN_RECIPE_PROJECTION, null, null, null);
-        //COLUMN_RECIPE_ID + " ASC");
-
     }
 
     @Override

@@ -13,13 +13,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout="@layout/fragment_recipe_list" />
-<!--
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/details_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">-->
 
-        <!--<include layout="@layout/activity_recipe_details"/>-->
 
         <FrameLayout
             android:id="@+id/details_ingredients_container"
@@ -27,11 +21,4 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout="@layout/fragment_details" />
-        <!--   <include
-               android:id="@+id/details_included_scroll"
-               layout="@layout/fragment_details_container"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:layout_weight="1" />-->
-    <!--</ScrollView>-->
 </LinearLayout>

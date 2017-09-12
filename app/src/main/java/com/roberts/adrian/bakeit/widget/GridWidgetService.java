@@ -15,22 +15,32 @@ import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.data.RecipeContract;
 
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_INGREDIENTS;
+
 /**
  * Created by Adrian on 06/09/2017.
  */
 
 public class GridWidgetService extends RemoteViewsService {
+    final String[] PROJECTION_INGREDIENTS = {
+            RecipeContract.RecipeEntry.COLUMN_INGREDIENT_MEASURE,
+            RecipeContract.RecipeEntry.COLUMN_INGREDIENT_NAME,
+            RecipeContract.RecipeEntry.COLUMN_INGREDIENT_QUANTITY,
+            RecipeContract.RecipeEntry.COLUMN_RECIPE_ID
+    };
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new GridRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new GridRemoteViewsFactory(this.getApplicationContext());
     }
 
     class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+        final String LOG_TAG = GridWidgetService.class.getSimpleName();
         private Context mContext;
-        private Cursor mCursor;
+        private Cursor mRecipesCursor;
+        private Cursor mIngredientsCursor;
 
-        public GridRemoteViewsFactory(Context appContext, Intent intent) {
+        public GridRemoteViewsFactory(Context appContext) {
             mContext = appContext;
         }
 
@@ -38,45 +48,61 @@ public class GridWidgetService extends RemoteViewsService {
         public void onDataSetChanged() {
             Uri RECIPES_URI = RecipeContract.BASE_CONTENT_URI.buildUpon().appendPath(RecipeContract.PATH_RECIPE).build();
 
-            if (mCursor != null) mCursor.close();
+            if (mRecipesCursor != null) mRecipesCursor.close();
 
             final long identityToken = Binder.clearCallingIdentity();
 
-            mCursor = mContext.getContentResolver().query(
+            mRecipesCursor = mContext.getContentResolver().query(
                     RECIPES_URI,
                     null,
                     null,
                     null,
                     null
             );
+
+            String selection = RecipeContract.RecipeEntry.COLUMN_RECIPE_ID + "=?";
+            // String[] selArgs = new String[]{String.valueOf(recipeId)};
+            mIngredientsCursor = mContext.getContentResolver().query(
+                    CONTENT_URI_INGREDIENTS,
+                    null,
+                    null,
+                    null,
+                    RecipeContract.RecipeEntry.COLUMN_RECIPE_ID + " ASC"
+            );
             Binder.restoreCallingIdentity(identityToken);
         }
 
         @Override
         public void onDestroy() {
-            if (mCursor != null)
-                mCursor.close();
+            if (mRecipesCursor != null)
+                mRecipesCursor.close();
+            if (mIngredientsCursor != null)
+                mIngredientsCursor.close();
         }
 
         @Override
         public int getCount() {
-            return mCursor == null ? 0 : mCursor.getCount();
+            return mRecipesCursor == null ? 0 : mRecipesCursor.getCount();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             if (position == AdapterView.INVALID_POSITION ||
-                    mCursor == null || mCursor.getCount() == 0) return null;
+                    mRecipesCursor == null || mRecipesCursor.getCount() == 0) return null;
 
+            Log.i(GridWidgetService.class.getSimpleName(), "pre cursor");
+            mRecipesCursor.moveToPosition(position);
 
-            mCursor.moveToPosition(position);
-
-            int recipeId = mCursor.getInt(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID));
-            String recipeName = mCursor.getString(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME));
-            String servings = mCursor.getString(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS));
-            String imageUrl = mCursor.getString(mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE));
+            int recipeId = mRecipesCursor.getInt(mRecipesCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID));
+            String recipeName = mRecipesCursor.getString(mRecipesCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME));
+            String servings = mRecipesCursor.getString(mRecipesCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS));
+            String imageUrl = mRecipesCursor.getString(mRecipesCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE));
 
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
+
+            Log.i(LOG_TAG, "position: " + position + " recipe: " + recipeName);
+            // Clear previously added ingredient views
+          //  if (position > 0) views.removeAllViews(R.id.widget_ingredient_items);
 
             views.setTextViewText(R.id.widget_recipe_name, recipeName);
             views.setTextViewText(R.id.widget_recipe_servings, getString(R.string.recipe_servings, servings));
@@ -85,20 +111,30 @@ public class GridWidgetService extends RemoteViewsService {
                 views.setImageViewUri(R.id.widget_image, Uri.parse(imageUrl));
             }
 
-    /*        Picasso.with(mContext)
-                    .load(Uri.parse(imageUrl))
-                    .placeholder(default_recipe_image)
-                    .error(default_recipe_image)
-                    .centerCrop()
-                    .into();*/
-            // Attach recipe name and Id to the intent so we can open a given recipe's details from the widget
+            if (mIngredientsCursor == null || mIngredientsCursor.getCount() == 0){
+                Log.i(LOG_TAG, "cursor null: " + (mIngredientsCursor==null));
+                Log.i(LOG_TAG, "cursor c: " + mIngredientsCursor.getCount());
+            }
+
+            while (mIngredientsCursor.moveToNext() &&
+                    mIngredientsCursor.getInt(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_ID)) == recipeId) {
+
+                RemoteViews ingredientsView = new RemoteViews(getPackageName(), R.layout.widget_ingredients);
+                String ingredient = mIngredientsCursor.getString(mIngredientsCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_INGREDIENT_NAME));
+                ingredientsView.setTextViewText(R.id.widget_ingredient_text_view, ingredient);
+                views.addView(R.id.widget_ingredient_items, ingredientsView);
+                Log.i(LOG_TAG, "added: " + ingredient + " for recipe: " + recipeName);
+
+            }
+
+
             Bundle extras = new Bundle();
             extras.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipeId);
             extras.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipeName);
             extras.putBoolean(RecipeDetailzActivity.EXTRA_FROM_WIDGET, true);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
-            views.setOnClickFillInIntent(R.id.widget_image, fillInIntent);
+            views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
 
             return views;
 

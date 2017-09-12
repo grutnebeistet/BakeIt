@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,9 @@ import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 import com.roberts.adrian.bakeit.fragments.DetailsFragment;
 import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.roberts.adrian.bakeit.R.drawable.defaul_baking_step;
 
@@ -66,7 +68,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         holder.stepDescriptionTv.setText(stepShortDescription);
 
 
-
     }
 
     @Override
@@ -87,26 +88,31 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onViewAttachedToWindow(StepsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        // set the idling resource to idle (testing)
+        RecipeDetailzActivity.mStepsLoadingIdle = true;
+    }
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_step_descr)
         TextView stepDescriptionTv;
+        @BindView(R.id.image_view_step_image)
         ImageView imageViewStepThumbnail;
 
         StepsViewHolder(View view) {
             super(view);
-            stepDescriptionTv = (TextView) view.findViewById(R.id.tv_step_descr);
-            imageViewStepThumbnail = (ImageView)view.findViewById(R.id.image_view_step_image);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
-       //    Log.i(LOG_TAG, "sync FINISHED");
-            RecipeDetailzActivity.mStepsLoadingIdle = true;
+
+
         }
 
         @Override
         public void onClick(View v) {
             if (mCursor.isClosed()) return;
             mCursor.moveToPosition(getAdapterPosition());
-            Log.i(LOG_TAG, "adapterPos: " + getAdapterPosition());
-
 
             Bundle stepDetailsBundle = new Bundle();
             String stepShortDescription = mCursor.getString(DetailsFragment.PROJECTION_INDEX_STEP_SHORT_DESC);
@@ -120,7 +126,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             stepDetailsBundle.putString(mContext.getString(R.string.steps_bundle_image_url), stepImageUrl);
             // TODO add thumbnail? (Non in JSON)
 
-            //mOnclickHandler.onClick(mCursor.getString(RecipeDetailsActivity.PROJECTION_INDEX_STEP_ID));
             mOnclickHandler.onClick(stepDetailsBundle);
         }
     }

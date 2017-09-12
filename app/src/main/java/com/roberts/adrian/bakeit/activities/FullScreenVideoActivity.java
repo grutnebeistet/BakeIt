@@ -10,35 +10,43 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.utils.ExoPlayerVideoHandler;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Adrian on 09/09/2017.
  */
 
-public class FullScreenVideoActivity  extends AppCompatActivity implements
-        View.OnClickListener{
+
+public class FullScreenVideoActivity extends AppCompatActivity implements
+        View.OnClickListener {
+
+    @BindView(R.id.playerView)
+    SimpleExoPlayerView mExoplayerView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_fullscreen);
+        ButterKnife.bind(this);
 
     }
 
     private boolean destroyVideo = true;
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         String videoUrl = getIntent().getExtras().getString("videoUri", null);
-        SimpleExoPlayerView exoPlayerView =
-                (SimpleExoPlayerView)findViewById(R.id.playerView);
         ExoPlayerVideoHandler.getInstance()
                 .prepareExoPlayerForUri(getApplicationContext(),
-                        Uri.parse(videoUrl), exoPlayerView);
+                        Uri.parse(videoUrl), mExoplayerView);
         ExoPlayerVideoHandler.getInstance().goToForeground();
 
         findViewById(R.id.exo_fullscreen).setOnClickListener(
-                new View.OnClickListener(){
+                new View.OnClickListener() {
                     @Override
-                    public void onClick(View v){
+                    public void onClick(View v) {
                         destroyVideo = false;
                         finish();
                     }
@@ -46,21 +54,21 @@ public class FullScreenVideoActivity  extends AppCompatActivity implements
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         destroyVideo = false;
         super.onBackPressed();
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         ExoPlayerVideoHandler.getInstance().goToBackground();
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
-        if(destroyVideo){
+        if (destroyVideo) {
             ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
         }
     }

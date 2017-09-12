@@ -73,33 +73,3 @@
     </LinearLayout>
 
 </LinearLayout>
-<!--
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageButton android:id="@id/exo_play"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="#CC000000"
-        style="@style/ExoMediaButton.Play"/>
-
-    <ImageButton android:id="@id/exo_pause"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="#CC000000"
-        style="@style/ExoMediaButton.Pause"/>
-
-
- <ImageButton android:id="@+id/exo_fullscreen"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom|end"
-        android:scaleType="fitCenter"
-        android:background="#FF000000"
-        android:layout_margin="8dp"
-        android:src="@drawable/ic_fullscreen_video"/>
-
-</FrameLayout>-->

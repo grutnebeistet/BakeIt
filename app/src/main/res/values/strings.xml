@@ -1,14 +1,20 @@
 <resources>
-    <string name="app_name">Bakeit</string>
-    <string name="content_authority">com.roberts.adrian.bakeit</string>
-    <string name="recipe_ingredients_label">Ingredients</string>
+    <string name="app_name" translatable="false">Bakeit</string>
+    <string name="content_authority" translatable="false">com.roberts.adrian.bakeit</string>
+    <string name="recipe_ingredients_label" translatable="true">Ingredients</string>
 
-    <string name="steps_bundle_description">description</string>
-    <string name="steps_bundle_title">shortDescription</string>
-    <string name="steps_bundle_video_url">videoURL</string>
-    <string name="steps_bundle_image_url">imageURL</string>
+    <string name="steps_bundle_description" translatable="false">description</string>
+    <string name="steps_bundle_title" translatable="false">shortDescription</string>
+    <string name="steps_bundle_video_url" translatable="false">videoURL</string>
+    <string name="steps_bundle_image_url" translatable="false">imageURL</string>
 
-    <string name="recipe_servings" formatted="true">Serves %s</string>
+    <string name="recipe_servings" formatted="true" translatable="true">Serves %s</string>
 
+    <string name="missing_video" translatable="true">Missing video for this step</string>
 
+    <!--Testing-->
+    <string name="test_details_recipe_name" translatable="false">Brownies</string>
+    <string name="test_details_ingredient" translatable="false">Bittersweet chocolate (60-70% cacao)</string>
+    <string name="test_main_recipe_name" translatable="false">Nutella Pie</string>
+    <string name="test_main_recipe_error" translatable="false">NutellaPie</string>
 </resources>

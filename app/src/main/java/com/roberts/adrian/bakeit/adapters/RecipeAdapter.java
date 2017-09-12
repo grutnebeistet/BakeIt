@@ -16,6 +16,9 @@ import com.roberts.adrian.bakeit.activities.MainActivity;
 import com.roberts.adrian.bakeit.fragments.RecipesFragment;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.roberts.adrian.bakeit.R.drawable.default_recipe_image;
 
 /**
@@ -49,19 +52,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         String recipeImage = mCursor.getString(RecipesFragment.INDEX_RECIPE_IMAGE);
 
         int id = mCursor.getInt(RecipesFragment.INDEX_RECIPE_ID);
-        Log.i(LOG_TAG, "pos: " + position + " id: " + id);
 
         holder.tvRecipeName.setText(recipeName);
-        holder.tvServings.setText(mContext.getString(R.string.recipe_servings,recipeServings));
+        holder.tvServings.setText(mContext.getString(R.string.recipe_servings, recipeServings));
 
         Uri imageUri = recipeImage == null ? Uri.parse("") : Uri.parse(recipeImage);
         // Current JSON provides no images - setting a default placeholder for now
-            Picasso.with(mContext)
-                    .load(imageUri).fit()
-                    .placeholder(default_recipe_image)
-                    .error(default_recipe_image)
-                    .centerCrop()
-                    .into(holder.ivRecipeImage);
+        Picasso.with(mContext)
+                .load(imageUri).fit()
+                .placeholder(default_recipe_image)
+                .error(default_recipe_image)
+                .centerCrop()
+                .into(holder.ivRecipeImage);
 
 
     }
@@ -95,18 +97,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        /* @BindView(R.id.textview_recipe_name)
-         TextView tvRecipeName;*/
-        final TextView tvRecipeName;
-        final TextView tvServings;
-        final ImageView ivRecipeImage;
+
+        @BindView(R.id.list_item_recipe_name)
+        TextView tvRecipeName;
+        @BindView(R.id.list_item_recipe_servings)
+        TextView tvServings;
+        @BindView(R.id.image_view_recipe_image)
+        ImageView ivRecipeImage;
 
         RecipeViewHolder(View v) {
             super(v);
-
-            tvRecipeName = (TextView) v.findViewById(R.id.list_item_recipe_name);
-            tvServings = (TextView)v.findViewById(R.id.list_item_recipe_servings);
-            ivRecipeImage = (ImageView)v.findViewById(R.id.image_view_recipe_image);
+            ButterKnife.bind(this, v);
 
             v.setOnClickListener(this);
         }

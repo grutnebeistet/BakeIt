@@ -1,4 +1,4 @@
-package com.roberts.adrian.bakeit;
+package com.roberts.adrian.bakeit.IdlingResource;
 
 import android.support.test.espresso.IdlingResource;
 

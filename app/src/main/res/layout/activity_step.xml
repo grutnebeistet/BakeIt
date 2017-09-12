@@ -33,11 +33,6 @@
             android:src="@drawable/empty_video"
             android:scaleType="centerCrop"/>
 
-      <!--  <com.devbrackets.android.exomedia.ui.widget.VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />-->
       <include layout="@layout/activity_video_fullscreen"/>
 
     </RelativeLayout>
@@ -50,6 +45,5 @@
         android:layout_margin="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorText" />
-
 
 </LinearLayout>

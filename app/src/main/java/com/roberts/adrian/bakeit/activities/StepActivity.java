@@ -52,8 +52,6 @@ public class StepActivity extends AppCompatActivity implements
         mRootView = findViewById(R.id.root_step_layout);
         mRootView.setOnClickListener(this);
 
-        // mExoVideoPlayerView.setControllerVisibilityListener(this);
-        //mExoVideoPlayerView.requestFocus();
 
         Bundle stepDescriptions = getIntent().getExtras();
         mStepTitle = stepDescriptions.getString(getString(R.string.steps_bundle_title));
@@ -72,22 +70,16 @@ public class StepActivity extends AppCompatActivity implements
           mTitleTextView.setText(mStepTitle);
         mDescriptionTextView.setText(mStepDescription);
 
-
-        // Initialize the Media Session.
-        // initializeMediaSession();
-
         if (mStepVideoUri == null ||
                 Uri.EMPTY.equals(mStepVideoUri)) {
             mNoVideoImageView.setVisibility(View.VISIBLE);
             mExoVideoPlayerView.setVisibility(View.GONE);
-            Toast.makeText(this, "Missing video for this step", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.missing_video), Toast.LENGTH_SHORT).show();
 
         } else {
             mNoVideoImageView.setVisibility(View.GONE);
             mExoVideoPlayerView.setVisibility(View.VISIBLE);
 
-
-            //initializePlayer(mStepVideoUri);
             Log.i(TAG, mStepVideoUri.toString());
         }
 
@@ -137,15 +129,6 @@ public class StepActivity extends AppCompatActivity implements
         destroyVideo = true;
         super.onBackPressed();
     }
- /*   @Override
-    protected void onStop() {
-        super.onStop();
-        if (mExoVideoPlayerView.isPlaying()) {
-            pausedInOnStop = true;
-            videoView.pause();
-        }
-    }*/
-
 
     @Override
     public void onClick(View v) {

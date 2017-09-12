@@ -26,6 +26,8 @@ import com.roberts.adrian.bakeit.adapters.StepsAdapter;
 import com.roberts.adrian.bakeit.data.RecipeContract;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_INGREDIENTS;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_STEPS;
@@ -39,19 +41,7 @@ public class DetailsFragment extends android.app.Fragment
 
 
     private static final String LOG_TAG = DetailsFragment.class.getSimpleName();
-    private IngredientsAdapter mIngredientsAdapter;
-    private RecyclerView mRecyclerViewIngredients;
-    TextView recipeNameTextView;
-    private Activity mActivity;
-    private static int mRecipeId;
-    private static String mRecipeName;
-    private StepsAdapter mStepsAdapter;
-    @BindView(R.id.recyclerViewSteps)
-    RecyclerView mRecyclerViewSteps;
 
-    private ScrollView mScrollView;
-    @BindView(R.id.cooking_steps_label)
-    TextView mStepsLabel;
 
     final String[] PROJECTION_INGREDIENTS = {
             RecipeContract.RecipeEntry.COLUMN_INGREDIENT_MEASURE,
@@ -82,7 +72,26 @@ public class DetailsFragment extends android.app.Fragment
     private static final int LOADER_ID_INGREDIENTS = 1348;
     private static final int LOADER_ID_STEPS = 1349;
 
+    private IngredientsAdapter mIngredientsAdapter;
+    //private RecyclerView mRecyclerViewIngredients;
+
+    //  TextView recipeNameTextView;
+    private Activity mActivity;
+    private static int mRecipeId;
+    private static String mRecipeName;
+    private StepsAdapter mStepsAdapter;
+    @BindView(R.id.recyclerViewSteps)
+    RecyclerView mRecyclerViewSteps;
+    @BindView(R.id.recyclerViewIngredients)
+    RecyclerView mRecyclerViewIngredients;
+    @BindView(R.id.text_view_recipe_name)
+    TextView recipeNameTextView;
+    private ScrollView mScrollView;
+    @BindView(R.id.cooking_steps_label)
+    TextView mStepsLabel;
+
     private int mScrollPos = 0;
+    private Unbinder unbinder;
 
     public static DetailsFragment newInstance(int id, String recipe) {
         mRecipeId = id;
@@ -96,11 +105,24 @@ public class DetailsFragment extends android.app.Fragment
 
         return ingredientsFragment;
     }
-    
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //   setRetainInstance(true);
+
+    }
+
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (getArguments() == null && savedInstanceState != null) {
+            mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
+            mRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME);
+            mScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+
+        }
     }
 
     @Override
@@ -111,61 +133,42 @@ public class DetailsFragment extends android.app.Fragment
 
         if (getArguments() != null) {
             mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
-            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS);
-        } else if (savedInstanceState != null) {
-            mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
+            mRecipeName = getArguments().getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
+            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,0);
         }
 
-
         View view = inflater.inflate(R.layout.fragment_details, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        recipeNameTextView = (TextView) view.findViewById(R.id.text_view_recipe_name);
-        mRecyclerViewIngredients = (RecyclerView) view.findViewById(R.id.recyclerViewIngredients);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
         mIngredientsAdapter = new IngredientsAdapter(mActivity);
         mRecyclerViewIngredients.setLayoutManager(layoutManager);
         mRecyclerViewIngredients.setAdapter(mIngredientsAdapter);
 
-        mStepsLabel = (TextView) view.findViewById(R.id.cooking_steps_label);
-        mRecyclerViewSteps = (RecyclerView) view.findViewById(R.id.recyclerViewSteps);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 3);
         mRecyclerViewSteps.setLayoutManager(gridLayoutManager);
         mStepsAdapter = new StepsAdapter(mActivity, this);
         mRecyclerViewSteps.setAdapter(mStepsAdapter);
 
+        mScrollView = view.findViewById(R.id.details_scroll_view);
 
-        // get a reference to the scrollview included in the layout(s)
-        mScrollView = view.findViewById(R.id.scroll_testing);
-        //   if (savedInstanceState == null) {
         mActivity.getLoaderManager().initLoader(LOADER_ID_INGREDIENTS, null, this);
         mActivity.getLoaderManager().initLoader(LOADER_ID_STEPS, null, this);
-        // }
+
 
         return view;
     }
 
-    public int getRecipeId() {
-        return mRecipeId;
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-        Log.i(LOG_TAG, "onActCreated: " + mRecipeName);
-        if (savedInstanceState != null) {
-            mRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME);
-            // recipeNameTextView.setText(savedInstanceState.getString("recipe_name"));
-            // return;
-        } else mRecipeName = getArguments().getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME);
-        //recipeNameTextView.setText(getArguments().getString("recipe_name"));
         if (mRecipeName != null) recipeNameTextView.setText(mRecipeName);
         else recipeNameTextView.setVisibility(View.GONE);
 
-
         mScrollView.setScrollY(mScrollPos);
-        Log.i(LOG_TAG, "setScroll: " + mScrollPos);
+
     }
 
 
@@ -174,7 +177,7 @@ public class DetailsFragment extends android.app.Fragment
         super.onSaveInstanceState(outState);
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mRecipeName);
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mRecipeId);
-        outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,mScrollPos);
+        outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, mScrollPos);
     }
 
     @Override
@@ -233,5 +236,11 @@ public class DetailsFragment extends android.app.Fragment
         Intent stepDetails = new Intent(getActivity(), StepActivity.class);
         stepDetails.putExtras(stepDescriptions);
         startActivity(stepDetails);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

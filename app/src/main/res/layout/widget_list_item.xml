@@ -1,38 +1,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_list_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/vanillaWhite"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:orientation="horizontal"
     android:padding="@dimen/widget_margin">
 
-    <TextView
-        android:id="@+id/widget_recipe_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/colorText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
-        android:textStyle="bold|italic"
-        tools:text="Drit med ost"/>
+        android:layout_gravity="start"
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/widget_image"
-        android:src="@drawable/default_recipe_image"
-        android:layout_below="@id/widget_recipe_name"
-        android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/widget_recipe_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorText"
+            android:textStyle="bold|italic"
+            tools:text="Drit med ost" />
 
-    <TextView
-        android:id="@+id/widget_recipe_servings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/colorText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
-        android:textStyle="bold|italic"
-        android:layout_marginBottom="8dp"
-        tools:text="Servings: 8"/>
+        <ImageView
+            android:id="@+id/widget_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/widget_recipe_name"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/default_recipe_image" />
+
+        <TextView
+            android:id="@+id/widget_recipe_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorText"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center_horizontal"
+            tools:text="Servings: 8" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widget_ingredient_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
 </LinearLayout>

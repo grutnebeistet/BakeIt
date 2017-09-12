@@ -5,6 +5,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.roberts.adrian.bakeit.IdlingResource.MainActivityIdlingResource;
 import com.roberts.adrian.bakeit.activities.MainActivity;
 
 import org.junit.After;
@@ -30,13 +31,21 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityScreenTest {
-    public static final String RECIPE_NAME = "Nutella Pie";
-    public static final String RECIPE_NAME_ERROR = "NutellaPie";
+    public static  String RECIPE_NAME;
+    public static  String RECIPE_NAME_ERROR ;
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     private MainActivityIdlingResource mainActivityIdlingResource;
+
+
+    @Before
+    public void init() {
+        mActivityTestRule.getActivity().getSupportFragmentManager().beginTransaction().commit();
+        RECIPE_NAME = mActivityTestRule.getActivity().getString(R.string.test_main_recipe_name);
+        RECIPE_NAME_ERROR = mActivityTestRule.getActivity().getString(R.string.test_main_recipe_error);
+    }
 
     @Before
     public void registerIntentServiceIdlingResource() {
@@ -47,11 +56,6 @@ public class MainActivityScreenTest {
     }
 
 
-    @Before
-    public void init() {
-        mActivityTestRule.getActivity().getSupportFragmentManager().beginTransaction().commit();
-
-    }
 
 
     @Test
@@ -60,8 +64,8 @@ public class MainActivityScreenTest {
         onView(withId(R.id.list_view_main))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         // Checks that the DetailActivity opens with the correct name displayed
-         onView(withId(R.id.text_view_recipe_name)).check(matches(withText(RECIPE_NAME)));
-         onView(withId(R.id.text_view_recipe_name)).check(matches(not(withText(RECIPE_NAME_ERROR))));
+        onView(withId(R.id.text_view_recipe_name)).check(matches(withText(RECIPE_NAME)));
+        onView(withId(R.id.text_view_recipe_name)).check(matches(not(withText(RECIPE_NAME_ERROR))));
 
     }
 

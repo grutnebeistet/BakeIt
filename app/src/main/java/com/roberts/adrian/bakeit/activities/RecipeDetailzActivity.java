@@ -14,34 +14,31 @@ public class RecipeDetailzActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_ID = "com.roberts.adrian.bakeit.extra.RECIPE_ID";
     public static final String EXTRA_RECIPE_NAME = "com.roberts.adrian.bakeit.extra.RECIPE_NAME";
     public static final String EXTRA_FROM_WIDGET = "com.roberts.adrian.bakeit.extra.FROM_WIDGET";
-    public static final String  EXTRA_DETAILS_SCROLL_POS = "com.roberts.adrian.bakeit.extra.SCROLL_POSITION";
+    public static final String EXTRA_DETAILS_SCROLL_POS = "com.roberts.adrian.bakeit.extra.SCROLL_POSITION";
 
     // for testing with idlingResource
     public static boolean mStepsLoadingIdle;
     public static boolean mIngredientsLoadingIdle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
-
 
         boolean fromWidget = getIntent().getExtras().getBoolean(EXTRA_FROM_WIDGET, false);
 
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
                 && !fromWidget) {
+
             // If the screen is now in landscape mode and the app not opened from the widget, we can show the
             // dialog in-line with the list so we don't need this activity.
             finish();
             return;
-        }
 
+        }
 
         if (savedInstanceState == null) {
             setContentView(R.layout.activity_recipe_details);
-            Log.i(LOG_TAG, "setting up detail frag..");
-
             DetailsFragment details = new DetailsFragment();
             details.setArguments(getIntent().getExtras());
 
@@ -50,14 +47,12 @@ public class RecipeDetailzActivity extends AppCompatActivity {
                     add(R.id.details_ingredients_container, details).
                     commit();
 
-
         }
-
     }
+
 
     @VisibleForTesting
     public boolean isSyncFinished() {
-        Log.i(LOG_TAG, "isSynchFinished: " + (mIngredientsLoadingIdle && mStepsLoadingIdle));
         return mIngredientsLoadingIdle && mStepsLoadingIdle;
     }
 }

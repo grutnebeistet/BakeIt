@@ -2,9 +2,13 @@ package com.roberts.adrian.bakeit.fragments;
 
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +19,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
@@ -30,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_INGREDIENTS;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_RECIPE;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_STEPS;
 
 /**
@@ -89,20 +96,15 @@ public class DetailsFragment extends android.app.Fragment
     private ScrollView mScrollView;
     @BindView(R.id.cooking_steps_label)
     TextView mStepsLabel;
-
+    @BindView(R.id.add_todo_image_view)
+    ImageView mTodoRecipeImageView;
     private int mScrollPos = 0;
     private Unbinder unbinder;
+    private static boolean mRecipeAsTodo;
 
-    public static DetailsFragment newInstance(int id, String recipe) {
-        mRecipeId = id;
-        mRecipeName = recipe;
+    public static DetailsFragment newInstance(Bundle args) {
         DetailsFragment ingredientsFragment = new DetailsFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, id);
-        args.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe);
         ingredientsFragment.setArguments(args);
-
         return ingredientsFragment;
     }
 
@@ -113,7 +115,6 @@ public class DetailsFragment extends android.app.Fragment
 
     }
 
-
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -121,6 +122,7 @@ public class DetailsFragment extends android.app.Fragment
             mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
             mRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME);
             mScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+            //     mRecipeAsTodo = savedInstanceState.getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO);
 
         }
     }
@@ -134,7 +136,8 @@ public class DetailsFragment extends android.app.Fragment
         if (getArguments() != null) {
             mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
             mRecipeName = getArguments().getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
-            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS,0);
+            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+            mRecipeAsTodo = getArguments().getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, false);
         }
 
         View view = inflater.inflate(R.layout.fragment_details, container, false);
@@ -156,9 +159,37 @@ public class DetailsFragment extends android.app.Fragment
         mActivity.getLoaderManager().initLoader(LOADER_ID_STEPS, null, this);
 
 
+        mTodoRecipeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentResolver resolver = mActivity.getContentResolver();
+                ContentValues values = new ContentValues();
+                // Clear any previous featured recipe
+                values.put(RecipeContract.RecipeEntry.COLUMN_RECIPE_ADDED_TODO, RecipeContract.RECIPE_OFF_TODO);
+                resolver.update(CONTENT_URI_RECIPE, values, null, null);
+                values.clear();
+                String toast;
+                // Change image, create toast, and update db accordingly
+                if (!mRecipeAsTodo) {
+                    values.put(RecipeContract.RecipeEntry.COLUMN_RECIPE_ADDED_TODO, RecipeContract.RECIPE_ON_TODO);
+                    mRecipeAsTodo = true;
+                    mTodoRecipeImageView.setImageResource(R.mipmap.ic_launcher);
+                    toast = mActivity.getString(R.string.toast_add_featured, mRecipeName);
+                } else {
+                    values.put(RecipeContract.RecipeEntry.COLUMN_RECIPE_ADDED_TODO, RecipeContract.RECIPE_OFF_TODO);
+                    mRecipeAsTodo = false;
+                    mTodoRecipeImageView.setImageResource(R.mipmap.ic_add_to_do);
+                    toast = mActivity.getString(R.string.toast_removed_featured, mRecipeName);
+                }
+                Uri recipeUri = ContentUris.withAppendedId(RecipeContract.RecipeEntry.CONTENT_URI_RECIPE, mRecipeId);
+                resolver.update(recipeUri, values, null, null);
+                resolver.notifyChange(recipeUri, null);
+                Toast.makeText(mActivity, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -169,6 +200,7 @@ public class DetailsFragment extends android.app.Fragment
 
         mScrollView.setScrollY(mScrollPos);
 
+        mTodoRecipeImageView.setImageResource(mRecipeAsTodo ? R.mipmap.ic_launcher : R.mipmap.ic_add_to_do);
     }
 
 
@@ -178,6 +210,7 @@ public class DetailsFragment extends android.app.Fragment
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mRecipeName);
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mRecipeId);
         outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, mScrollPos);
+        //   outState.putBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, mRecipeAsTodo);
     }
 
     @Override
@@ -228,6 +261,7 @@ public class DetailsFragment extends android.app.Fragment
         Log.i(LOG_TAG, "onresume");
         mActivity.getLoaderManager().restartLoader(LOADER_ID_INGREDIENTS, null, this);
         mActivity.getLoaderManager().restartLoader(LOADER_ID_STEPS, null, this);
+
 
     }
 

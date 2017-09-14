@@ -14,6 +14,7 @@ import android.util.Log;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_INGREDIENT_ID;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ID;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.TABLE_INGREDIENTS;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.TABLE_RECIPES;
 
 /**
  * Created by Adrian on 27/07/2017.
@@ -120,16 +121,16 @@ public class RecipesContentProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case CODE_RECIPE:
                 newRowId = db.insert(RecipeContract.RecipeEntry.TABLE_RECIPES, null, values);
-             //   Log.e(LOG_TAG, "inserted REC");
+                //   Log.e(LOG_TAG, "inserted REC");
                 break;
             case CODE_INGREDIENTS:
                 newRowId = db.insert(TABLE_INGREDIENTS, null, values);
-               // Log.e(LOG_TAG, "inserted ING");
+                // Log.e(LOG_TAG, "inserted ING");
                 break;
             case CODE_STEPS:
                 newRowId = db.insert(RecipeContract.RecipeEntry.TABLE_STEPS, null, values);
                 //Log.i(LOG_TAG, "insertion Descr: " + values.getAsString(RecipeContract.RecipeEntry.COLUMN_STEP_DESCR));
-               // Log.e(LOG_TAG, "inserted STE");
+                // Log.e(LOG_TAG, "inserted STE");
                 break;
             default:
                 throw new IllegalArgumentException("Failed to insert: " + uri);
@@ -153,7 +154,24 @@ public class RecipesContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        if (values.size() == 0) return 0;
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int rowsUpdated;
+        switch (mUriMatcher.match(uri)) {
+            case CODE_RECIPE:
+                rowsUpdated = db.update(RecipeContract.RecipeEntry.TABLE_RECIPES, values, selection, selectionArgs);
+                break;
+            case CODE_RECIPE_ID:
+                selection = COLUMN_RECIPE_ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsUpdated = db.update(TABLE_RECIPES, values, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("cannot update for : " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsUpdated;
     }
 
     @Nullable

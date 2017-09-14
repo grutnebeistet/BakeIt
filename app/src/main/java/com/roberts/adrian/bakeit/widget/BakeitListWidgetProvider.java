@@ -14,14 +14,13 @@ import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
 /**
  * Implementation of App Widget functionality.
  */
-public class BakeitWidgetProvider extends AppWidgetProvider {
-    private final static String LOG_TAG = BakeitWidgetProvider.class.getSimpleName();
+public class BakeitListWidgetProvider extends AppWidgetProvider {
+    private final static String LOG_TAG = BakeitListWidgetProvider.class.getSimpleName();
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // Log.i(BakeitWidgetProvider.class.getSimpleName(), "onUpdate (empty now)");
+        // Log.i(BakeitListWidgetProvider.class.getSimpleName(), "onUpdate (empty now)");
         // There may be multiple widgets active, so update all of them
-
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
 
@@ -32,11 +31,12 @@ public class BakeitWidgetProvider extends AppWidgetProvider {
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(detailsIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            views.setPendingIntentTemplate(R.id.widget_grid_view, clickPendingIntentTemplate);
+            views.setPendingIntentTemplate(R.id.widget_list_view, clickPendingIntentTemplate);
 
-            Intent intent = new Intent(context, GridWidgetService.class);
-            views.setRemoteAdapter(R.id.widget_grid_view, intent);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            Intent intent = new Intent(context, ListWidgetService.class);
+            intent.putExtra(ListWidgetService.EXTRA_WIDGET_TYPE, ListWidgetService.EXTRA_ALL_RECIPES_WIDGET);
+            views.setRemoteAdapter(R.id.widget_list_view, intent);
+
 
 
             // Tell the AppWidgetManager to perform an update on the current app widget

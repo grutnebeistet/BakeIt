@@ -15,6 +15,8 @@ public class RecipeContract {
     public static final String PATH_STEPS = "steps";
     public static final String PATH_STEPS_WITH_INGREDIENTS = "stepsWithIngredients";
 
+    public static final int RECIPE_OFF_TODO = 0;
+    public static final int RECIPE_ON_TODO = 1;
     public static final class RecipeEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI_RECIPE = BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
@@ -34,6 +36,7 @@ public class RecipeContract {
 
         public static final String COLUMN_RECIPE_SERVINGS = "recipe_servings";
         public static final String COLUMN_RECIPE_IMAGE = "recipe_image";
+        public static final String COLUMN_RECIPE_ADDED_TODO = "recipe_added_todo";
 
         // Ingredients columns
         public static final String COLUMN_INGREDIENT_ID = "ingredient_id";

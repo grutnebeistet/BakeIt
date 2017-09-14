@@ -24,7 +24,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ADDED_TODO;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_ID;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME;
+import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS;
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.CONTENT_URI_RECIPE;
 
 public class RecipesFragment extends Fragment
@@ -37,14 +41,16 @@ public class RecipesFragment extends Fragment
 
     private static final String[] MAIN_RECIPE_PROJECTION = {
             COLUMN_RECIPE_ID,
-            RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME,
-            RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE,
-            RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVINGS
+            COLUMN_RECIPE_NAME,
+            COLUMN_RECIPE_IMAGE,
+            COLUMN_RECIPE_SERVINGS,
+            COLUMN_RECIPE_ADDED_TODO
     };
     public static final int INDEX_RECIPE_ID = 0;
     public static final int INDEX_RECIPE_NAME = 1;
     public static final int INDEX_RECIPE_IMAGE = 2;
     public static final int INDEX_RECIPE_SERVINGS = 3;
+    public static final int INDEX_RECIPE_TODO = 4;
 
     private final int LOADER_ID = 1347;
 
@@ -61,6 +67,7 @@ public class RecipesFragment extends Fragment
     RecyclerView mRecipesRecyclerView;
 
     private Unbinder unbinder;
+    boolean mRecipeTodo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,10 +107,11 @@ public class RecipesFragment extends Fragment
             mCurrentRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 0);
             mCurrentRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
             mCurrentScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+            mRecipeTodo = savedInstanceState.getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, false);
             mRecipesRecyclerView.smoothScrollToPosition(0);
 
             if (mCurrentRecipeName != null)
-                showDetails(mCurrentRecipeId, mCurrentRecipeName, mCurrentScrollPos);
+                showDetails(savedInstanceState);
         }
 
     }
@@ -115,6 +123,7 @@ public class RecipesFragment extends Fragment
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mCurrentRecipeId);
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mCurrentRecipeName);
         outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, mCurrentScrollPos);
+        outState.putBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, mRecipeTodo);
 
     }
 
@@ -128,8 +137,8 @@ public class RecipesFragment extends Fragment
     }
 
     @Override
-    public void onClick(int recipe_id, String recipe_name) {
-        showDetails(recipe_id, recipe_name, 0);
+    public void onClick(Bundle args) {
+        showDetails(args);
     }
 
     @Override
@@ -139,14 +148,10 @@ public class RecipesFragment extends Fragment
     }
 
 
-    private void showDetails(int recipe_id, String recipe_name, int scrollPos) {
-        mCurrentRecipeId = recipe_id;
-        mCurrentRecipeName = recipe_name;
-
+    private void showDetails(Bundle recipeArgs) {
         if (mDualPane) {
-
             // Check what fragments are currently shown and replace it accordingly
-            DetailsFragment ingredients = DetailsFragment.newInstance(recipe_id, recipe_name);
+            DetailsFragment ingredients = DetailsFragment.newInstance(recipeArgs);
 
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
@@ -159,15 +164,8 @@ public class RecipesFragment extends Fragment
         } else {
             // Create an intent for starting the DetailsActivity
             Intent intent = new Intent();
-
-            // explicitly set the activity context and class
-            // associated with the intent (context, class)
             intent.setClass(mActivity, RecipeDetailzActivity.class);
-            // pass the current position
-            intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_ID, recipe_id);
-            intent.putExtra(RecipeDetailzActivity.EXTRA_RECIPE_NAME, recipe_name); // TODO heller sende inn  bundle slik som step?
-            intent.putExtra(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, scrollPos);
-
+            intent.putExtras(recipeArgs);
             startActivity(intent);
 
         }
@@ -182,9 +180,11 @@ public class RecipesFragment extends Fragment
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG, "data size " + data.getCount());
+        if (data == null || !data.moveToFirst()) return;
+
         if (mRecipeAdapter != null) mRecipeAdapter.swapCursor(data);
 
+        mRecipeTodo = data.getInt(INDEX_RECIPE_TODO) == RecipeContract.RECIPE_ON_TODO;
     }
 
     @Override

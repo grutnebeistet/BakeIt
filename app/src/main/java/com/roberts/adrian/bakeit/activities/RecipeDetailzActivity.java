@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.fragments.DetailsFragment;
@@ -15,6 +14,7 @@ public class RecipeDetailzActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_NAME = "com.roberts.adrian.bakeit.extra.RECIPE_NAME";
     public static final String EXTRA_FROM_WIDGET = "com.roberts.adrian.bakeit.extra.FROM_WIDGET";
     public static final String EXTRA_DETAILS_SCROLL_POS = "com.roberts.adrian.bakeit.extra.SCROLL_POSITION";
+    public static final String EXTRA_DETAILS_ON_TODO = "com.roberts.adrian.bakeit.extra.RECIPE_ON_TODO";
 
     // for testing with idlingResource
     public static boolean mStepsLoadingIdle;

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 
 public class FullScreenVideoActivity extends AppCompatActivity implements
         View.OnClickListener {
+    final String LOG_TAG = FullScreenVideoActivity.class.getSimpleName();
 
     @BindView(R.id.playerView)
     SimpleExoPlayerView mExoplayerView;
@@ -37,11 +39,14 @@ public class FullScreenVideoActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(LOG_TAG, "onResume");
         String videoUrl = getIntent().getExtras().getString("videoUri", null);
         ExoPlayerVideoHandler.getInstance()
                 .prepareExoPlayerForUri(getApplicationContext(),
                         Uri.parse(videoUrl), mExoplayerView);
         ExoPlayerVideoHandler.getInstance().goToForeground();
+
+        Log.i(LOG_TAG, "Handler INstance: " + ExoPlayerVideoHandler.getInstance().toString());
 
         findViewById(R.id.exo_fullscreen).setOnClickListener(
                 new View.OnClickListener() {
@@ -62,16 +67,18 @@ public class FullScreenVideoActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+
         ExoPlayerVideoHandler.getInstance().goToBackground();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
         if (destroyVideo) {
             ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
         }
+        super.onStop();
     }
+
 
     @Override
     public void onClick(View view) {

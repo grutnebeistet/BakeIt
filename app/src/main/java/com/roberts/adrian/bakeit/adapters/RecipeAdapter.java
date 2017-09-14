@@ -3,8 +3,8 @@ package com.roberts.adrian.bakeit.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.activities.MainActivity;
+import com.roberts.adrian.bakeit.activities.RecipeDetailzActivity;
+import com.roberts.adrian.bakeit.data.RecipeContract;
 import com.roberts.adrian.bakeit.fragments.RecipesFragment;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +37,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     final private RecipeAdapterOnClickHandler mOnClickHandler;
 
     public interface RecipeAdapterOnClickHandler {
-        void onClick(int recipe_id, String recipe_name);
+        void onClick(Bundle recipeGoodies);
     }
 
     public RecipeAdapter(Context context, RecipeAdapterOnClickHandler clickHandler) {
@@ -116,10 +118,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public void onClick(View v) {
             if (mCursor.isClosed()) return;
             mCursor.moveToPosition(getAdapterPosition());
-
-            mOnClickHandler.onClick(
-                    mCursor.getInt(RecipesFragment.INDEX_RECIPE_ID),
+            Bundle args = new Bundle();
+            args.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID,
+                    mCursor.getInt(RecipesFragment.INDEX_RECIPE_ID));
+            args.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME,
                     mCursor.getString(RecipesFragment.INDEX_RECIPE_NAME));
+            args.putBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO,
+                    (mCursor.getInt(RecipesFragment.INDEX_RECIPE_TODO) == RecipeContract.RECIPE_ON_TODO));
+            mOnClickHandler.onClick(args);
 
         }
     }

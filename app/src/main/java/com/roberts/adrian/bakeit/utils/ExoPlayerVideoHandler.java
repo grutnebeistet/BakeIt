@@ -2,7 +2,6 @@ package com.roberts.adrian.bakeit.utils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.SurfaceView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -47,7 +46,6 @@ public class ExoPlayerVideoHandler {
 
     public void prepareExoPlayerForUri(Context context, Uri uri,
                                        SimpleExoPlayerView exoPlayerView) {
-        Log.i(LOG_TAG, "prepareExo...");
         if (context != null && uri != null && exoPlayerView != null) {
             if (!uri.equals(playerUri) || mPlayer == null) {
                 TrackSelection.Factory adaptiveTrackSelectionFactory =

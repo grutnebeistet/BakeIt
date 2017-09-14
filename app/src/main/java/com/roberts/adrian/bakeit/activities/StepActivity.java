@@ -80,7 +80,6 @@ public class StepActivity extends AppCompatActivity implements
             mNoVideoImageView.setVisibility(View.GONE);
             mExoVideoPlayerView.setVisibility(View.VISIBLE);
 
-            Log.i(TAG, mStepVideoUri.toString());
         }
 
 
@@ -88,6 +87,7 @@ public class StepActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
+        Log.i(TAG, "onResume");
         super.onResume();
         try {
             ExoPlayerVideoHandler.getInstance()
@@ -102,6 +102,7 @@ public class StepActivity extends AppCompatActivity implements
         mRootView.findViewById(R.id.exo_fullscreen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                destroyVideo = false;
                 Intent intent = new Intent(StepActivity.this, FullScreenVideoActivity.class);
                 intent.putExtra("videoUri", mStringVideoUrl);
                 startActivity(intent);
@@ -117,11 +118,18 @@ public class StepActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        Log.i(TAG, "onStop");
+        super.onStop();
         if (destroyVideo) {
             ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

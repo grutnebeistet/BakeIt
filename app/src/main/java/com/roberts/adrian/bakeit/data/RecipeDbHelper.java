@@ -3,6 +3,7 @@ package com.roberts.adrian.bakeit.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.*;
 
@@ -13,7 +14,7 @@ import static com.roberts.adrian.bakeit.data.RecipeContract.RecipeEntry.*;
 
 public class RecipeDbHelper extends SQLiteOpenHelper {
     private final static String DATABASE_NAME = "recipes.db";
-    private static final int DB_VERSION = 24;
+    private static final int DB_VERSION = 31;
 
     public RecipeDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -21,12 +22,15 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i("ONCREATE DB", "ONCREATEDB");
+
         final String SQL_CREATE_RECIPES_TABLE =
                 "CREATE TABLE IF NOT EXISTS " + TABLE_RECIPES + " (" +
                         COLUMN_RECIPE_ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
                         COLUMN_RECIPE_SERVINGS + " INTEGER, " +
-                        COLUMN_RECIPE_IMAGE + " TEXT" +
+                        COLUMN_RECIPE_IMAGE + " TEXT, " +
+                        COLUMN_RECIPE_ADDED_TODO + " INTEGER" +
                         ");";
         final String SQL_CREATE_INGREDIENTS_TABLE =
                 "CREATE TABLE IF NOT EXISTS " + TABLE_INGREDIENTS + " (" +
@@ -58,6 +62,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STEPS);
+        Log.i("ONUPGRADE", "DROPPED TABLS");
 
         onCreate(db);
     }

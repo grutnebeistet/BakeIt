@@ -20,7 +20,7 @@
             android:textColor="@color/colorText" />
 
         <ListView
-            android:id="@+id/widget_grid_view"
+            android:id="@+id/widget_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start" />

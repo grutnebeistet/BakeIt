@@ -49,6 +49,7 @@ public class StepActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_step);
         ButterKnife.bind(this);
 
+
         mRootView = findViewById(R.id.root_step_layout);
         mRootView.setOnClickListener(this);
 
@@ -67,7 +68,7 @@ public class StepActivity extends AppCompatActivity implements
         }
 
 
-          mTitleTextView.setText(mStepTitle);
+        mTitleTextView.setText(mStepTitle);
         mDescriptionTextView.setText(mStepDescription);
 
         if (mStepVideoUri == null ||
@@ -112,6 +113,12 @@ public class StepActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         ExoPlayerVideoHandler.getInstance().goToBackground();
@@ -121,7 +128,9 @@ public class StepActivity extends AppCompatActivity implements
     protected void onStop() {
         Log.i(TAG, "onStop");
         super.onStop();
-        if (destroyVideo) {
+        if (this.isChangingConfigurations()) {
+            Log.i(TAG, "configuration is changing: keep playing");
+        } else if (destroyVideo) {
             ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
         }
 
@@ -136,6 +145,12 @@ public class StepActivity extends AppCompatActivity implements
     public void onBackPressed() {
         destroyVideo = true;
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override

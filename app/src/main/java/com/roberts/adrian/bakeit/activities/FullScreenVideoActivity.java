@@ -73,10 +73,13 @@ public class FullScreenVideoActivity extends AppCompatActivity implements
 
     @Override
     protected void onStop() {
-        if (destroyVideo) {
+        super.onStop();
+        if (this.isChangingConfigurations()) {
+            Log.i(LOG_TAG, "configuration is changing: keep playing");
+        } else if (destroyVideo) {
             ExoPlayerVideoHandler.getInstance().releaseVideoPlayer();
         }
-        super.onStop();
+
     }
 
 

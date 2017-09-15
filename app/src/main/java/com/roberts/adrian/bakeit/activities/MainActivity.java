@@ -3,6 +3,7 @@ package com.roberts.adrian.bakeit.activities;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.sync.RecipesSyncUtils;
@@ -19,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.i(LOG_TAG, "onCreate");
+        if (savedInstanceState != null)
+            Log.i(LOG_TAG, "main RECIPE: " + savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID));
         Boolean connection = NetworkUtils.workingConnection(this);
 
         if (connection) {

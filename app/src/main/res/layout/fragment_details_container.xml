@@ -8,7 +8,7 @@
     <!--<include layout="@layout/activity_recipe_details"/>-->
 
     <FrameLayout
-        android:id="@+id/details_ingredients_container"
+        android:id="@+id/details_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout="@layout/fragment_details" />

@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.roberts.adrian.bakeit.R;
 import com.roberts.adrian.bakeit.fragments.DetailsFragment;
@@ -20,11 +21,10 @@ public class RecipeDetailzActivity extends AppCompatActivity {
     public static boolean mStepsLoadingIdle;
     public static boolean mIngredientsLoadingIdle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.i(LOG_TAG, "onCreate");
         boolean fromWidget = getIntent().getExtras().getBoolean(EXTRA_FROM_WIDGET, false);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -34,7 +34,6 @@ public class RecipeDetailzActivity extends AppCompatActivity {
             // dialog in-line with the list so we don't need this activity.
             finish();
             return;
-
         }
 
         if (savedInstanceState == null) {
@@ -42,14 +41,11 @@ public class RecipeDetailzActivity extends AppCompatActivity {
             DetailsFragment details = new DetailsFragment();
             details.setArguments(getIntent().getExtras());
 
-
             getFragmentManager().beginTransaction().
-                    add(R.id.details_ingredients_container, details).
+                    add(R.id.details_fragment_container, details).
                     commit();
-
         }
     }
-
 
     @VisibleForTesting
     public boolean isSyncFinished() {

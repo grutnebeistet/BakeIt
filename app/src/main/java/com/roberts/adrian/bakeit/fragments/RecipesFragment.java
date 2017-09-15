@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -72,13 +73,21 @@ public class RecipesFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+      //  setRetainInstance(true);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
+        Log.i(LOG_TAG, "oncreateView");
+/*        if (savedInstanceState != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                && mCurrentRecipeId >= 0 && savedInstanceState.getBoolean("wasLand")) {
+            // inflate fragment
+            mDualPane = false;
+            showDetails(savedInstanceState);
+            //  return null;
+        }*/
 
         View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -96,9 +105,8 @@ public class RecipesFragment extends Fragment
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
         super.onActivityCreated(savedInstanceState);
-
+        Log.i(LOG_TAG, "onActCerated");
         View landFrame = mActivity.findViewById(R.id.main_landscape);
         mDualPane = (landFrame != null &&
                 landFrame.getVisibility() == View.VISIBLE);
@@ -119,11 +127,14 @@ public class RecipesFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(LOG_TAG, "onSaved");
+        Log.i(LOG_TAG, "onSave");
         outState.putInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, mCurrentRecipeId);
         outState.putString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, mCurrentRecipeName);
         outState.putInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, mCurrentScrollPos);
         outState.putBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, mRecipeTodo);
+
+        boolean land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        outState.putBoolean("wasLand", land);
 
     }
 
@@ -144,18 +155,21 @@ public class RecipesFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.i(LOG_TAG, "onDestroyView");
         unbinder.unbind();
     }
 
 
     private void showDetails(Bundle recipeArgs) {
+        Log.i(LOG_TAG, "showDetails for: " + recipeArgs.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME) +
+                "\nid: " + recipeArgs.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID));
         if (mDualPane) {
             // Check what fragments are currently shown and replace it accordingly
-            DetailsFragment ingredients = DetailsFragment.newInstance(recipeArgs);
+            DetailsFragment details = DetailsFragment.newInstance(recipeArgs);
 
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
-            ft.replace(R.id.details_ingredients_container, ingredients);
+            ft.replace(R.id.details_fragment_container, details);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
             ft.commit();

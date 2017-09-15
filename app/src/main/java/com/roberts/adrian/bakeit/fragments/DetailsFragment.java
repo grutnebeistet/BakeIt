@@ -111,19 +111,27 @@ public class DetailsFragment extends android.app.Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //   setRetainInstance(true);
+        Log.i(LOG_TAG, "onCreate");
+        if (getArguments() != null) {
+            mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
+            mRecipeName = getArguments().getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
+            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
+            mRecipeAsTodo = getArguments().getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, false);
 
+            Log.i(LOG_TAG, "onCreate, args != null , mRecipeId: " + mRecipeId);
+        }
     }
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        Log.i(LOG_TAG, "onViewStateRestored");
         if (getArguments() == null && savedInstanceState != null) {
-            mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
+            mRecipeId = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID);
             mRecipeName = savedInstanceState.getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME);
             mScrollPos = savedInstanceState.getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
             //     mRecipeAsTodo = savedInstanceState.getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO);
-
+            Log.i(LOG_TAG, "onViewStateRestored , mRecipeId: " + mRecipeId);
         }
     }
 
@@ -133,12 +141,7 @@ public class DetailsFragment extends android.app.Fragment
         mActivity = getActivity();
         Log.i(LOG_TAG, "onCreateView");
 
-        if (getArguments() != null) {
-            mRecipeId = getArguments().getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID, 1);
-            mRecipeName = getArguments().getString(RecipeDetailzActivity.EXTRA_RECIPE_NAME, null);
-            mScrollPos = getArguments().getInt(RecipeDetailzActivity.EXTRA_DETAILS_SCROLL_POS, 0);
-            mRecipeAsTodo = getArguments().getBoolean(RecipeDetailzActivity.EXTRA_DETAILS_ON_TODO, false);
-        }
+
 
         View view = inflater.inflate(R.layout.fragment_details, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -194,7 +197,7 @@ public class DetailsFragment extends android.app.Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        Log.i(LOG_TAG, "onActivityCreated");
         if (mRecipeName != null) recipeNameTextView.setText(mRecipeName);
         else recipeNameTextView.setVisibility(View.GONE);
 

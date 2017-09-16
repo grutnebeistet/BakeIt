@@ -171,6 +171,7 @@ public class RecipesContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("cannot update for : " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
+        Log.i(LOG_TAG,"updated: " + uri);
         return rowsUpdated;
     }
 

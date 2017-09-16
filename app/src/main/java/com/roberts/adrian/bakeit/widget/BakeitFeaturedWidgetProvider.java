@@ -33,17 +33,18 @@ public class BakeitFeaturedWidgetProvider extends AppWidgetProvider {
 
             Intent intent = new Intent(context, ListWidgetService.class);
 
-            intent.putExtra(ListWidgetService.EXTRA_WIDGET_TYPE,ListWidgetService.EXTRA_FEATURED_RECIPE_WIDGET);
+            intent.putExtra(ListWidgetService.EXTRA_WIDGET_TYPE, ListWidgetService.EXTRA_FEATURED_RECIPE_WIDGET);
 
             views.setRemoteAdapter(R.id.widget_featured_list_view, intent);
 
-            ComponentName component=new ComponentName(context,ListWidgetService.class);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_featured_list_view);
-            appWidgetManager.updateAppWidget(component, views);
 
+            ComponentName component = new ComponentName(context, ListWidgetService.class);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_featured_list_view);
             appWidgetManager.updateAppWidget(appWidgetId, views);
 
 
+
+            appWidgetManager.updateAppWidget(component, views);
 
         }
     }

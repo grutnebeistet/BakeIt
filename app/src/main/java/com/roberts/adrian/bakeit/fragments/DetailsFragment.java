@@ -2,6 +2,8 @@ package com.roberts.adrian.bakeit.fragments;
 
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -30,6 +32,7 @@ import com.roberts.adrian.bakeit.activities.StepActivity;
 import com.roberts.adrian.bakeit.adapters.IngredientsAdapter;
 import com.roberts.adrian.bakeit.adapters.StepsAdapter;
 import com.roberts.adrian.bakeit.data.RecipeContract;
+import com.roberts.adrian.bakeit.widget.BakeitFeaturedWidgetProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,7 +145,6 @@ public class DetailsFragment extends android.app.Fragment
         Log.i(LOG_TAG, "onCreateView");
 
 
-
         View view = inflater.inflate(R.layout.fragment_details, container, false);
         unbinder = ButterKnife.bind(this, view);
 
@@ -178,6 +180,14 @@ public class DetailsFragment extends android.app.Fragment
                     mRecipeAsTodo = true;
                     mTodoRecipeImageView.setImageResource(R.mipmap.ic_launcher);
                     toast = mActivity.getString(R.string.toast_add_featured, mRecipeName);
+
+                    Intent intent = new Intent(mActivity, BakeitFeaturedWidgetProvider.class);
+                    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                    // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    // since it seems the onUpdate() is only fired on that:
+                    int[] ids = AppWidgetManager.getInstance(mActivity.getApplication()).getAppWidgetIds(new ComponentName(mActivity.getApplication(), BakeitFeaturedWidgetProvider.class));
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+                    mActivity.sendBroadcast(intent);
                 } else {
                     values.put(RecipeContract.RecipeEntry.COLUMN_RECIPE_ADDED_TODO, RecipeContract.RECIPE_OFF_TODO);
                     mRecipeAsTodo = false;

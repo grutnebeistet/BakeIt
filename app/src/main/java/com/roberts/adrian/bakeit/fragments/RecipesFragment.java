@@ -165,11 +165,11 @@ public class RecipesFragment extends Fragment
                 "\nid: " + recipeArgs.getInt(RecipeDetailzActivity.EXTRA_RECIPE_ID));
         if (mDualPane) {
             // Check what fragments are currently shown and replace it accordingly
-            DetailsFragment details = DetailsFragment.newInstance(recipeArgs);
+            DetailsFragment ingredients = DetailsFragment.newInstance(recipeArgs);
 
             FragmentTransaction ft = getFragmentManager()
                     .beginTransaction();
-            ft.replace(R.id.details_fragment_container, details);
+            ft.replace(R.id.details_fragment_container, ingredients);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
             ft.commit();
